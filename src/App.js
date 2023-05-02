@@ -6,6 +6,9 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import "./App.css";
 import Home from "./pages/Home";
 
@@ -23,10 +26,25 @@ const App = () => {
                 ...prevPosts,
                 {
                     key: data.key,
+                    eventName: data.val().eventName,
+                    geocodeName: data.val().geocodeName,
+                    website: data.val().website,
                     coords: {
                         lat: data.val().coords.lat,
                         lng: data.val().coords.lng,
                     },
+                    duration: {
+                        startDate: data.val().duration.startDate,
+                        endDate: data.val().duration.endDate,
+                    },
+                    images: data.val().images,
+                    likes: data.val().likes,
+                    dislikes: data.val().dislikes,
+                    type: data.val().type,
+                    tags: data.val().tags,
+                    comments: data.val().comments,
+                    author: data.val().author,
+                    date: data.val().date,
                 },
             ]);
         });
@@ -69,6 +87,18 @@ const App = () => {
 
     return (
         <div className="App">
+            <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="dark"
+            />
             <BrowserRouter>
                 <Routes>
                     <Route path="/">
