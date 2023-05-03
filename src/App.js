@@ -8,6 +8,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import Home from "./pages/Home";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 
 const DB_POSTS_KEY = "posts";
 
@@ -67,12 +69,20 @@ const App = () => {
     });
   }, []);
 
+  const handleLogOut = () => {
+    signOut(auth).then(() => {
+      setLoggedInUser(null);
+    });
+  };
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/">
-            <Route index element={<Home posts={posts} />} />
+            <Route index element={<LoginPage />} />
+            <Route path="home" element={<Home posts={posts} />} />
+            <Route path="signup" element={<SignUpPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

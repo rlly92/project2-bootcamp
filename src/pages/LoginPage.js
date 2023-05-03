@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
   const [state, setState] = useState({ emailInput: "", passwordInput: "" });
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,6 +19,9 @@ const LoginPage = () => {
 
       .then(() => {
         setState({ emailInput: "", passwordInput: "" });
+      })
+      .then(() => {
+        navigate("/home");
       })
 
       .catch((error) => {

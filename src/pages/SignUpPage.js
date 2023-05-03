@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "../firebase";
 
-const SignUpForm = () => {
+const SignUpPage = () => {
   const [state, setState] = useState({ emailInput: "", passwordInput: "" });
 
   const handleSubmit = (e) => {
@@ -45,4 +45,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignUpPage;
