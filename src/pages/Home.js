@@ -1,33 +1,17 @@
 import React, { useEffect, useState } from "react";
 
-import {
-    useJsApiLoader,
-    GoogleMap,
-    Marker,
-    Autocomplete,
-    DirectionsRenderer,
-} from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
-import { ref as dbRef, push, set } from "firebase/database";
-import { database, storage, auth } from "../firebase";
-
-import { toast } from "react-toastify";
-
-import {
-    Typography,
-    Box,
-    Stack,
-    Button,
-    Input,
-    TextField,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 import Geocode from "react-geocode";
-import SidebarWrapper from "../components/Sidebar/SidebarWrapper";
+import BazaarForm from "../components/BazaarForm/BazaarForm";
 import SideInfo from "../components/Sidebar/SideInfo/SideInfo";
+import SidebarWrapper from "../components/Sidebar/SidebarWrapper";
+
 import { libraries } from "../googleUtils";
 
-const DB_POSTS_KEY = "posts";
+import greenMarker from "../assets/images/permMarkerResized.png";
 
 const options = {
     // zoomControl: false,
@@ -45,6 +29,7 @@ function Home({ posts }) {
     const [markerCoords, setMarkerCoords] = useState(null);
     const [nameAtMarkerCoords, setNameAtMarkerCoords] = useState("");
     const [selectedPost, setSelectedPost] = useState(null);
+    const [showBazaarForm, setShowBazaarForm] = useState(false);
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
@@ -59,6 +44,10 @@ function Home({ posts }) {
         );
     }, []);
 
+    useEffect(() => {
+        console.log("component updated");
+    });
+
     const getAddressFromLatLng = async (lat, lng) => {
         try {
             let response = await Geocode.fromLatLng(lat, lng);
@@ -66,50 +55,6 @@ function Home({ posts }) {
         } catch (err) {
             console.log(err);
         }
-    };
-
-    const writeData = async () => {
-        const postListRef = dbRef(database, DB_POSTS_KEY);
-        const newPostRef = push(postListRef);
-
-        let geocodeName = await getAddressFromLatLng(
-            markerCoords.toJSON().lat,
-            markerCoords.toJSON().lng
-        );
-
-        await set(newPostRef, {
-            eventName: "MEGA BAZAAR",
-            geocodeName: geocodeName,
-            website: "https://www.timeout.sg",
-            coords: {
-                lat: markerCoords.toJSON().lat,
-                lng: markerCoords.toJSON().lng,
-            },
-            duration: {
-                startDate: Date.now() - 100000,
-                endDate: Date.now(),
-            },
-            images: 0,
-            likes: 0,
-            dislikes: 0,
-            type: 0,
-            tags: 0,
-            comments: 0,
-            author: "Bob",
-            date: Date.now(),
-            // author: this.state.loggedInUser.email,
-        });
-
-        toast.success("Successfully added to database!", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-        });
     };
 
     const handleClick = (e) => {
@@ -121,15 +66,26 @@ function Home({ posts }) {
 
     const handleClearMarker = (e) => {
         setMarkerCoords(null);
+        clearForm();
     };
 
-    const handleTagLocation = () => {
-        writeData();
+    const handleTagLocation = async () => {
+        setShowBazaarForm(true);
+        let geocodeName = await getAddressFromLatLng(
+            markerCoords.toJSON().lat,
+            markerCoords.toJSON().lng
+        );
+
+        setNameAtMarkerCoords(geocodeName);
     };
 
     const handleMarkerClick = async (post) => {
         setMarkerCoords(null);
         setSelectedPost(post);
+    };
+
+    const clearForm = () => {
+        setShowBazaarForm(false);
     };
 
     if (!isLoaded) {
@@ -182,6 +138,14 @@ function Home({ posts }) {
                 )}
 
                 {selectedPost && <SideInfo selectedPost={selectedPost} />}
+                {showBazaarForm && (
+                    <BazaarForm
+                        geocodeName={nameAtMarkerCoords}
+                        markerCoords={markerCoords}
+                        author="Timmy"
+                        clearForm={clearForm}
+                    />
+                )}
             </SidebarWrapper>
 
             <GoogleMap
@@ -195,6 +159,7 @@ function Home({ posts }) {
                 {posts != null &&
                     posts.map((post) => (
                         <Marker
+                            icon={greenMarker}
                             key={post.key}
                             onClick={() => handleMarkerClick(post)}
                             position={{
