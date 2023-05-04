@@ -88,9 +88,6 @@ const App = () => {
   }, []);
 
   const handleLogOut = () => {
-    signOut(auth).then(() => {
-      setLoggedInUser(null);
-    });
     return new Promise((res, rej) => {
       res(
         signOut(auth).then(() => {

@@ -26,11 +26,13 @@ import {
 } from "@mui/material";
 
 import Geocode from "react-geocode";
-import SidebarWrapper from "../components/Sidebar/SidebarWrapper";
+import BazaarForm from "../components/BazaarForm/BazaarForm";
 import SideInfo from "../components/Sidebar/SideInfo/SideInfo";
+import SidebarWrapper from "../components/Sidebar/SidebarWrapper";
+
 import { libraries } from "../googleUtils";
 
-const DB_POSTS_KEY = "posts";
+import greenMarker from "../assets/images/permMarkerResized.png";
 
 const options = {
   // zoomControl: false,
@@ -42,12 +44,14 @@ const options = {
 };
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
+const DB_POSTS_KEY = "posts";
 
 function Home({ posts, handleLogOut }) {
   const [coords, setCoords] = useState({ lat: 1.3521, lng: 103.8198 });
   const [markerCoords, setMarkerCoords] = useState(null);
   const [nameAtMarkerCoords, setNameAtMarkerCoords] = useState("");
   const [selectedPost, setSelectedPost] = useState(null);
+  const [showBazaarForm, setShowBazaarForm] = useState(false);
   const navigate = useNavigate();
 
   const { isLoaded } = useJsApiLoader({
@@ -103,17 +107,6 @@ function Home({ posts, handleLogOut }) {
       date: Date.now(),
       // author: this.state.loggedInUser.email,
     });
-
-    toast.success("Successfully added to database!", {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-    });
   };
 
   const handleClick = (e) => {
@@ -125,10 +118,17 @@ function Home({ posts, handleLogOut }) {
 
   const handleClearMarker = (e) => {
     setMarkerCoords(null);
+    clearForm();
   };
 
-  const handleTagLocation = () => {
-    writeData();
+  const handleTagLocation = async () => {
+    setShowBazaarForm(true);
+    let geocodeName = await getAddressFromLatLng(
+      markerCoords.toJSON().lat,
+      markerCoords.toJSON().lng
+    );
+
+    setNameAtMarkerCoords(geocodeName);
   };
 
   const handleMarkerClick = async (post) => {
@@ -136,10 +136,12 @@ function Home({ posts, handleLogOut }) {
     setSelectedPost(post);
   };
 
+  const clearForm = () => {
+    setShowBazaarForm(false);
+  };
+
   const handleLogOutAndNavigate = () => {
-    handleLogOut().then(() => {
-      navigate("/");
-    });
+    handleLogOut().then(() => navigate("/"));
   };
 
   if (!isLoaded) {
@@ -155,14 +157,18 @@ function Home({ posts, handleLogOut }) {
       textAlign={"center"}
     >
       <SidebarWrapper>
+        <Button
+          variant="contained"
+          sx={{ width: "50%", m: 1 }}
+          onClick={handleLogOutAndNavigate}
+          type="button"
+        >
+          Log Out
+        </Button>
         <Typography variant="body1">
           Type in a place or click on the map to get started
         </Typography>
         <TextField variant="outlined" size="small" />
-
-        <br />
-
-        <button onClick={handleLogOutAndNavigate}>Logout</button>
 
         {markerCoords && (
           <>
@@ -194,6 +200,14 @@ function Home({ posts, handleLogOut }) {
         )}
 
         {selectedPost && <SideInfo selectedPost={selectedPost} />}
+        {showBazaarForm && (
+          <BazaarForm
+            geocodeName={nameAtMarkerCoords}
+            markerCoords={markerCoords}
+            author="Timmy"
+            clearForm={clearForm}
+          />
+        )}
       </SidebarWrapper>
 
       <GoogleMap
@@ -207,6 +221,7 @@ function Home({ posts, handleLogOut }) {
         {posts != null &&
           posts.map((post) => (
             <Marker
+              icon={greenMarker}
               key={post.key}
               onClick={() => handleMarkerClick(post)}
               position={{
