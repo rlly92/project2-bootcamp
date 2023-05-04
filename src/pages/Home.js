@@ -54,10 +54,10 @@ function Home({ posts, handleLogOut }) {
   const [showBazaarForm, setShowBazaarForm] = useState(false);
   const navigate = useNavigate();
 
-  // const { isLoaded } = useJsApiLoader({
-  //   googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-  //   libraries: libraries,
-  // });
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+    libraries: libraries,
+  });
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -144,9 +144,9 @@ function Home({ posts, handleLogOut }) {
     handleLogOut().then(() => navigate("/"));
   };
 
-  // if (!isLoaded) {
-  //   return <Typography variant="h1">Loading...</Typography>;
-  // }
+  if (!isLoaded) {
+    return <Typography variant="h1">Loading...</Typography>;
+  }
 
   return (
     <Box
@@ -209,7 +209,7 @@ function Home({ posts, handleLogOut }) {
           />
         )}
       </SidebarWrapper>
-      {/* 
+
       <GoogleMap
         center={coords}
         zoom={13}
@@ -230,7 +230,7 @@ function Home({ posts, handleLogOut }) {
               }}
             />
           ))}
-      </GoogleMap> */}
+      </GoogleMap>
     </Box>
   );
 }
