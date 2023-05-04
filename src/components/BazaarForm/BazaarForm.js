@@ -7,7 +7,9 @@ import {
     Stack,
     TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+
+import { UserContext } from "../../App";
 
 import { ref as dbRef, push, set } from "firebase/database";
 import { database } from "../../firebase";
@@ -28,6 +30,8 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
         type: "",
         tags: "",
     });
+
+    const context = useContext(UserContext);
 
     const writeData = async () => {
         const postListRef = dbRef(database, DB_POSTS_KEY);
@@ -191,6 +195,7 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
             <Button type="submit" variant="contained" onClick={handleSubmit}>
                 Submit
             </Button>
+            <p>Context: {context && context.loggedInUser.uid}</p>
         </form>
     );
 }
