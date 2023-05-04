@@ -4,7 +4,14 @@ import { onChildAdded, ref as dbRef } from "firebase/database";
 import { database, storage, auth } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import {
+    BrowserRouter,
+    Route,
+    Routes,
+    Link,
+    Navigate,
+    useNavigate,
+} from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -81,7 +88,6 @@ const App = () => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("user is signed in");
-                console.log(user);
                 setLoggedInUser(user);
             } else {
                 console.log("no user currently signed in");
@@ -89,6 +95,12 @@ const App = () => {
             }
         });
     }, []);
+
+    function RequireAuth({ children, redirectTo, user }) {
+        console.log(user);
+
+        return user != null ? children : <Navigate to={redirectTo} />;
+    }
 
     const handleLogOut = () => {
         return new Promise((res, rej) => {
@@ -128,12 +140,18 @@ const App = () => {
                             <Route
                                 path="home"
                                 element={
-                                    <Home
-                                        posts={posts}
-                                        handleLogOut={handleLogOut}
-                                    />
+                                    <RequireAuth
+                                        redirectTo="/"
+                                        user={loggedInUser}
+                                    >
+                                        <Home
+                                            posts={posts}
+                                            handleLogOut={handleLogOut}
+                                        />
+                                    </RequireAuth>
                                 }
                             />
+
                             <Route path="signup" element={<SignUpPage />} />
                         </Route>
                     </Routes>

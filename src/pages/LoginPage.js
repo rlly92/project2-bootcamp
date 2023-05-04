@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState, useEffect } from "react";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -7,6 +7,16 @@ import { Link } from "react-router-dom";
 const LoginPage = () => {
   const [state, setState] = useState({ emailInput: "", passwordInput: "" });
   const navigate = useNavigate();
+
+  const authUser = getAuth();
+  const user = authUser.currentUser;
+
+  useEffect(() => {
+    if (user != null) {
+      console.log("user is signed in");
+      navigate("/home");
+    }
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
