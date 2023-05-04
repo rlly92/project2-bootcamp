@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [state, setState] = useState({ emailInput: "", passwordInput: "" });
@@ -32,7 +33,7 @@ const LoginPage = () => {
   };
 
   const handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    setState({ ...state, [e.target.name]: e.target.value });
   };
 
   return (
@@ -53,6 +54,8 @@ const LoginPage = () => {
           onChange={handleChange}
         ></input>
         <button type="submit">Login</button>
+        <br />
+        <Link to="signup">sign up</Link>
       </form>
     </div>
   );

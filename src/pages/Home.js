@@ -8,7 +8,10 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 
+import { useNavigate } from "react-router-dom";
+
 import { ref as dbRef, push, set } from "firebase/database";
+
 import { database, storage, auth } from "../firebase";
 
 import { toast } from "react-toastify";
@@ -40,11 +43,12 @@ const options = {
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
 
-function Home({ posts }) {
+function Home({ posts, handleLogOut }) {
   const [coords, setCoords] = useState({ lat: 1.3521, lng: 103.8198 });
   const [markerCoords, setMarkerCoords] = useState(null);
   const [nameAtMarkerCoords, setNameAtMarkerCoords] = useState("");
   const [selectedPost, setSelectedPost] = useState(null);
+  const navigate = useNavigate();
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
@@ -132,6 +136,12 @@ function Home({ posts }) {
     setSelectedPost(post);
   };
 
+  const handleLogOutAndNavigate = () => {
+    handleLogOut().then(() => {
+      navigate("/");
+    });
+  };
+
   if (!isLoaded) {
     return <Typography variant="h1">Loading...</Typography>;
   }
@@ -149,6 +159,10 @@ function Home({ posts }) {
           Type in a place or click on the map to get started
         </Typography>
         <TextField variant="outlined" size="small" />
+
+        <br />
+
+        <button onClick={handleLogOutAndNavigate}>Logout</button>
 
         {markerCoords && (
           <>

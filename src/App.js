@@ -4,7 +4,7 @@ import { onChildAdded, ref as dbRef } from "firebase/database";
 import { database, storage, auth } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -87,6 +87,19 @@ const App = () => {
     });
   }, []);
 
+  const handleLogOut = () => {
+    signOut(auth).then(() => {
+      setLoggedInUser(null);
+    });
+    return new Promise((res, rej) => {
+      res(
+        signOut(auth).then(() => {
+          setLoggedInUser(null);
+        })
+      );
+    });
+  };
+
   return (
     <div className="App">
       <ToastContainer
@@ -105,7 +118,11 @@ const App = () => {
         <Routes>
           <Route path="/">
             <Route index element={<LoginPage />} />
-            <Route path="home" element={<Home posts={posts} />} />
+
+            <Route
+              path="home"
+              element={<Home posts={posts} handleLogOut={handleLogOut} />}
+            />
             <Route path="signup" element={<SignUpPage />} />
           </Route>
         </Routes>
