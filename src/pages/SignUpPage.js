@@ -1,64 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  getAuth,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    getAuth,
 } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../App";
 
 const SignUpPage = () => {
-  const [state, setState] = useState({ emailInput: "", passwordInput: "" });
-  const navigate = useNavigate();
+    const [state, setState] = useState({ emailInput: "", passwordInput: "" });
+    const navigate = useNavigate();
 
-  const authUser = getAuth();
-  const user = authUser.currentUser;
+    const context = useContext(UserContext);
 
-  useEffect(() => {
-    if (user != null) {
-      console.log("user is signed in");
-      navigate("/home");
-    }
-  });
+    useEffect(() => {
+        if (context.loggedInUser != null) navigate("/home");
+    }, [context.loggedInUser]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    createUserWithEmailAndPassword(auth, state.emailInput, state.passwordInput)
-      .then(() => {
-        setState({ emailInput: "", passwordInput: "" });
-      })
-      .then(() => {
-        navigate("/home");
-      });
-  };
+        createUserWithEmailAndPassword(
+            auth,
+            state.emailInput,
+            state.passwordInput
+        )
+            .then(() => {
+                setState({ emailInput: "", passwordInput: "" });
+            })
+            .then(() => {
+                navigate("/home");
+            });
+    };
 
-  const handleChange = (e) => {
-    setState({ ...state, [e.target.id]: e.target.value });
-    console.log(state);
-  };
+    const handleChange = (e) => {
+        setState({ ...state, [e.target.id]: e.target.value });
+        console.log(state);
+    };
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          value={state.emailInput}
-          id="emailInput"
-          type="email"
-          placeholder="enter your email here"
-          onChange={handleChange}
-        ></input>
-        <input
-          value={state.passwordInput}
-          id="passwordInput"
-          type="password"
-          placeholder="give me your password"
-          onChange={handleChange}
-        ></input>
-        <button type="submit">Sign Up</button>
-      </form>
-    </div>
-  );
+    return (
+        <div>
+            <form onSubmit={handleSubmit}>
+                <input
+                    value={state.emailInput}
+                    id="emailInput"
+                    type="email"
+                    placeholder="enter your email here"
+                    onChange={handleChange}
+                ></input>
+                <input
+                    value={state.passwordInput}
+                    id="passwordInput"
+                    type="password"
+                    placeholder="give me your password"
+                    onChange={handleChange}
+                ></input>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    );
 };
 
 export default SignUpPage;

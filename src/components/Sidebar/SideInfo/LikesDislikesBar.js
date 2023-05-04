@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ref as dbRef, push, set, update } from "firebase/database";
+import { ref as dbRef, update } from "firebase/database";
 import { database } from "../../../firebase";
 import { Button, Stack, Typography } from "@mui/material";
 import {

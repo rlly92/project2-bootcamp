@@ -1,8 +1,6 @@
-import { Button, Paper, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import format from "date-fns/format";
-import React, { useContext } from "react";
-import { ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
-import { UserContext } from "../../../App";
+import React from "react";
 import LikesDislikesBar from "./LikesDislikesBar";
 
 function SideInfo({ selectedPost }) {
