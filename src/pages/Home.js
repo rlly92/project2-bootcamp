@@ -145,8 +145,6 @@ function Home({ posts, handleLogOut }) {
     const handleLogOutAndNavigate = () => {
         handleLogOut().then(() => navigate("/"));
     };
-    const context = useContext(UserContext);
-    console.log(context.loggedInUser);
 
     if (!isLoaded) {
         return <Typography variant="h1">Loading...</Typography>;

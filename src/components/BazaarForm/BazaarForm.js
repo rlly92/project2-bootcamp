@@ -14,7 +14,6 @@ import { UserContext } from "../../App";
 import { ref as dbRef, push, set } from "firebase/database";
 import { database } from "../../firebase";
 import { toast } from "react-toastify";
-import { getAuth } from "firebase/auth";
 
 const DB_POSTS_KEY = "posts";
 
@@ -31,6 +30,8 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
         type: "",
         tags: "",
     });
+
+    const context = useContext(UserContext);
 
     const writeData = async () => {
         const postListRef = dbRef(database, DB_POSTS_KEY);
@@ -116,8 +117,6 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
             console.log(err);
         }
     };
-
-    const context = useContext(UserContext);
 
     return (
         <form>

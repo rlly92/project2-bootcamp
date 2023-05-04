@@ -1,6 +1,9 @@
-import { Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import format from "date-fns/format";
-import React from "react";
+import React, { useContext } from "react";
+import { ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
+import { UserContext } from "../../../App";
+import LikesDislikesBar from "./LikesDislikesBar";
 
 function SideInfo({ selectedPost }) {
     return (
@@ -10,9 +13,7 @@ function SideInfo({ selectedPost }) {
                 Posted by {selectedPost.author} on{" "}
                 {new Date(selectedPost.date).toLocaleString("en-SG")}
             </Typography>
-            <Typography variant="body1">
-                Likes: {selectedPost.likes}, Dislikes: {selectedPost.dislikes}
-            </Typography>
+            <LikesDislikesBar selectedPost={selectedPost} />
             <Typography variant="body2">
                 Homepage: {selectedPost.website}
             </Typography>
