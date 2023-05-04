@@ -7,11 +7,14 @@ import {
     Stack,
     TextField,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+
+import { UserContext } from "../../App";
 
 import { ref as dbRef, push, set } from "firebase/database";
 import { database } from "../../firebase";
 import { toast } from "react-toastify";
+import { getAuth } from "firebase/auth";
 
 const DB_POSTS_KEY = "posts";
 
@@ -114,6 +117,8 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
         }
     };
 
+    const context = useContext(UserContext);
+
     return (
         <form>
             <Stack spacing={1} p={2} alignItems={"flex-start"}>
@@ -191,6 +196,7 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
             <Button type="submit" variant="contained" onClick={handleSubmit}>
                 Submit
             </Button>
+            <p>Context: {context && context.loggedInUser.uid}</p>
         </form>
     );
 }
