@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+    useContext,
+} from "react";
 
 import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
@@ -39,6 +45,11 @@ function Home({ handleLogOut }) {
     const [selectedPost, setSelectedPost] = useState(null);
     const [showBazaarForm, setShowBazaarForm] = useState(false);
     const [posts, setPosts] = useState([]);
+
+    // Context and display name variables:
+    const context = useContext(UserContext);
+    const displayName = context.loggedInUser.displayName;
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -185,6 +196,7 @@ function Home({ handleLogOut }) {
             textAlign={"center"}
         >
             <SidebarWrapper>
+                Welcome back {displayName}
                 <Button
                     variant="contained"
                     sx={{ width: "50%", m: 1 }}
@@ -197,7 +209,6 @@ function Home({ handleLogOut }) {
                     Type in a place or click on the map to get started
                 </Typography>
                 <TextField variant="outlined" size="small" />
-
                 {markerCoords && (
                     <>
                         <Typography variant="h3">Current position:</Typography>
@@ -228,7 +239,6 @@ function Home({ handleLogOut }) {
                         </Button>
                     </>
                 )}
-
                 {selectedPost && <SideInfo selectedPost={selectedPost} />}
                 {showBazaarForm && (
                     <BazaarForm
