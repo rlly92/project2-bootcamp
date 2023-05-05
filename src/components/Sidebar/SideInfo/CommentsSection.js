@@ -73,6 +73,7 @@ function CommentsSection({ selectedPost }) {
                     value={commentInput}
                     onChange={handleChange}
                     fullWidth
+                    multiline
                 />
             </form>
             {commentRender}
