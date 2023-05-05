@@ -18,8 +18,6 @@ function LikesDislikesBar({ selectedPost }) {
     const context = useContext(UserContext);
 
     useEffect(() => {
-        console.log(selectedPost.likes);
-        console.log(selectedPost.likes[context.loggedInUser.uid]);
         if (selectedPost !== 0 && selectedPost.likes[context.loggedInUser.uid])
             setStatus("liked");
         else if (
@@ -111,13 +109,21 @@ function LikesDislikesBar({ selectedPost }) {
             alignItems={"center"}
             justifyContent={"center"}
         >
-            <Button disabled={status === "disliked"} onClick={handleLike}>
+            <Button
+                disabled={status === "disliked"}
+                onClick={handleLike}
+                type="button"
+            >
                 {status === "liked" ? <ThumbUpAlt /> : <ThumbUpOffAlt />}
             </Button>
             <Typography variant="body1">
                 {LikesInNumber - DislikesInNumber}
             </Typography>
-            <Button disabled={status === "liked"} onClick={handleDislike}>
+            <Button
+                disabled={status === "liked"}
+                onClick={handleDislike}
+                type="button"
+            >
                 {status === "disliked" ? <ThumbDownAlt /> : <ThumbDownOffAlt />}
             </Button>
         </Stack>

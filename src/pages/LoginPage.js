@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import React, { useState, useContext } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -11,30 +11,21 @@ const LoginPage = () => {
 
     const context = useContext(UserContext);
 
-    useEffect(() => {
-        if (context.loggedInUser != null) navigate("/home");
-    }, [context.loggedInUser]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
         signInWithEmailAndPassword(auth, state.emailInput, state.passwordInput)
             .then((userCredential) => {
                 console.log("somebody has signed in");
-
-                const user = userCredential.user;
             })
 
             .then(() => {
                 setState({ emailInput: "", passwordInput: "" });
             })
             .then(() => {
-                navigate("/home");
+                navigate("/");
             })
-
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
                 console.log("theres is an error signing in");
             });
     };
