@@ -12,31 +12,72 @@ import React, { useState, useContext } from "react";
 import { UserContext } from "../../App";
 
 import { ref as dbRef, push, set } from "firebase/database";
-import { database } from "../../firebase";
+import { database, storage } from "../../firebase";
 import { toast } from "react-toastify";
+import { MuiFileInput } from "mui-file-input";
+import {
+    ref as sRef,
+    getDownloadURL,
+    uploadBytesResumable,
+} from "firebase/storage";
 
 const DB_POSTS_KEY = "posts";
+const STORAGE_IMAGES_KEY = "images";
 
 /* <TextField id="outlined-basic" label="name" variant="outlined" size="small" />; */
 
-function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
+function BazaarForm({ geocodeName, markerCoords, clearForm }) {
     const [formInputs, setFormInputs] = useState({
         eventName: "",
         website: "",
         startDate: "",
         endDate: "",
-        fileInputFile: null,
-        fileInputValue: "",
         type: "",
         tags: "",
     });
 
+    const [file, setFile] = useState(null);
+
     const context = useContext(UserContext);
 
-    const writeData = async () => {
-        const postListRef = dbRef(database, DB_POSTS_KEY);
-        const newPostRef = push(postListRef);
+    const uploadFile = async (files, postKey) => {
+        if (files == null) return 0;
 
+        let images = {};
+
+        await Promise.all(
+            files.map(async (image, index) => {
+                const imageRef = sRef(
+                    storage,
+                    `${STORAGE_IMAGES_KEY}/${postKey}/${image.name}`
+                );
+                await uploadBytesResumable(imageRef, image);
+                let imageURL = await getDownloadURL(imageRef);
+                images[crypto.randomUUID()] = imageURL;
+                console.log(images);
+
+                toast.success(
+                    `Successfully uploaded image! (${index + 1}/${
+                        files.length
+                    })`,
+                    {
+                        position: "top-center",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    }
+                );
+            })
+        );
+        console.log(images);
+        return images;
+    };
+
+    const writeData = async (imageObj, newPostRef) => {
         try {
             await set(newPostRef, {
                 eventName: formInputs.eventName,
@@ -50,7 +91,7 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
                     startDate: formInputs.startDate,
                     endDate: formInputs.endDate,
                 },
-                images: 0,
+                images: imageObj,
                 likes: 0,
                 dislikes: 0,
                 type: formInputs.type,
@@ -88,15 +129,9 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
         }
     };
 
-    const handleFileChange = (e) => {
-        console.log(e.target.files[0]);
-        setFormInputs((prevInputs) => {
-            return {
-                ...prevInputs,
-                fileInputFile: e.target.files[0],
-                fileInputValue: e.target.value,
-            };
-        });
+    const handleFileChange = (newFile) => {
+        console.log(newFile);
+        setFile(newFile);
     };
 
     const handleChange = (e) => {
@@ -110,13 +145,17 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            await writeData();
 
-            clearForm();
-        } catch (err) {
-            console.log(err);
-        }
+        const postListRef = dbRef(database, DB_POSTS_KEY);
+        const newPostRef = push(postListRef);
+        const newPostKey = newPostRef.key;
+
+        const images = await uploadFile(file, newPostKey);
+        console.log("in handleSubmit");
+        console.log(images);
+        await writeData(images, newPostRef);
+
+        clearForm();
     };
 
     return (
@@ -158,13 +197,11 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
                     value={formInputs.endDate}
                     onChange={handleChange}
                 />
-                <TextField
-                    name="images"
-                    type="file"
-                    variant="outlined"
-                    size="small"
-                    value={formInputs.fileInputValue}
+
+                <MuiFileInput
+                    value={file}
                     onChange={handleFileChange}
+                    multiple
                 />
                 <div>
                     <FormControl size="small">
@@ -196,7 +233,6 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
             <Button type="submit" variant="contained" onClick={handleSubmit}>
                 Submit
             </Button>
-            <pre>{JSON.stringify(formInputs, null, 2)}</pre>
         </form>
     );
 }
