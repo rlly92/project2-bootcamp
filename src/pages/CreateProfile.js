@@ -8,30 +8,31 @@ function CreateProfile() {
     const [state, setState] = useState({ displayName: "" });
     const context = useContext(UserContext);
 
-    useEffect(() => {
-        if (context.loggedInUser != null) {
-            navigate("/login");
-        }
-    }, [context.loggedInUser]);
+    // useEffect(() => {
+    //     if (context.loggedInUser != null) {
+    //         navigate("/login");
+    //     }
+    // }, [context.loggedInUser]);
 
-    const updateProfile = async (displayName) => {
+    const addUserName = (displayName) => {
         const auth = getAuth();
         const user = auth.currentUser;
 
-        try {
-            await updateProfile(user, {
-                displayName,
+        return updateProfile(user, {
+            displayName,
+        })
+            .then(() => {
+                console.log("Profile updated successfully!");
+            })
+            .catch((error) => {
+                console.error("Error updating profile:", error);
             });
-            console.log("Profile updated successfully!");
-        } catch (error) {
-            console.error("Error updating profile:", error);
-        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        updateProfile(state.displayName).then(() => {
+        addUserName(state.displayName).then(() => {
             navigate("/");
         });
     };

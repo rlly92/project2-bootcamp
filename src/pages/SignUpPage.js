@@ -16,7 +16,7 @@ const SignUpPage = () => {
 
     useEffect(() => {
         if (context.loggedInUser != null) {
-            navigate("enterUsername");
+            navigate("/");
         }
     }, [context.loggedInUser]);
 
@@ -32,7 +32,7 @@ const SignUpPage = () => {
                 setState({ emailInput: "", passwordInput: "" });
             })
             .then(() => {
-                navigate("/");
+                navigate("/enterUsername");
             });
     };
 

@@ -72,7 +72,7 @@ const App = () => {
                                 index
                                 element={
                                     <RequireAuth
-                                        redirectTo="/login"
+                                        redirectTo="login"
                                         user={loggedInUser}
                                     >
                                         <Home handleLogOut={handleLogOut} />
@@ -82,7 +82,10 @@ const App = () => {
 
                             <Route path="login" element={<LoginPage />} />
 
-                            <Route path="signup" element={<SignUpPage />} />
+                            <Route
+                                path="/login/signup"
+                                element={<SignUpPage />}
+                            />
 
                             <Route
                                 path="enterUsername"
