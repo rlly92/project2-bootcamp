@@ -56,7 +56,8 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
                 type: formInputs.type,
                 tags: formInputs.tags,
                 comments: 0,
-                author: author,
+                authorDisplayName: context.loggedInUser.displayName,
+                authorUid: context.loggedInUser.uid,
                 date: Date.now(),
                 // author: this.state.loggedInUser.email,
             });
@@ -176,8 +177,8 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
                             value={formInputs.type}
                             onChange={handleChange}
                         >
-                            <MenuItem value="pasar-malam">Pasar Malam</MenuItem>
-                            <MenuItem value="pop-up-store">
+                            <MenuItem value="Pasar Malam">Pasar Malam</MenuItem>
+                            <MenuItem value="Pop Up Store">
                                 Pop Up Store
                             </MenuItem>
                         </Select>
@@ -195,7 +196,7 @@ function BazaarForm({ geocodeName, markerCoords, author, clearForm }) {
             <Button type="submit" variant="contained" onClick={handleSubmit}>
                 Submit
             </Button>
-            <p>Context: {context && context.loggedInUser.uid}</p>
+            <pre>{JSON.stringify(formInputs, null, 2)}</pre>
         </form>
     );
 }

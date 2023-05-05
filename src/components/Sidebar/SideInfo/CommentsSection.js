@@ -1,12 +1,17 @@
 import { Button, Paper, TextField, Typography } from "@mui/material";
 import { ref as dbRef, push, set, update } from "firebase/database";
 import { database } from "../../../firebase";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+
+import { UserContext } from "../../../App";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const DB_POSTS_KEY = "posts";
 
 function CommentsSection({ selectedPost }) {
     const [commentInput, setCommentInput] = useState("");
+
+    const context = useContext(UserContext);
 
     const addComments = (postKey) => {
         const commentRef = dbRef(
@@ -17,7 +22,9 @@ function CommentsSection({ selectedPost }) {
 
         set(newCommentRef, {
             text: commentInput,
-            author: "Timothy",
+            author: context.loggedInUser.displayName,
+            authorUid: context.loggedInUser.uid,
+            date: Date.now(),
         });
     };
 
@@ -28,6 +35,8 @@ function CommentsSection({ selectedPost }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         addComments(selectedPost.key);
+
+        setCommentInput("");
     };
 
     let commentRender;
@@ -40,13 +49,13 @@ function CommentsSection({ selectedPost }) {
         );
     else if (selectedPost.comments !== 0)
         commentRender = Object.keys(selectedPost.comments).map((key) => {
+            let comment = selectedPost.comments[key];
             return (
                 <Paper key={key}>
-                    <Typography variant="body1">
-                        {selectedPost.comments[key].text}
-                    </Typography>
+                    <Typography variant="body1">{comment.text}</Typography>
                     <Typography variant="overline">
-                        {selectedPost.comments[key].author}
+                        Posted by {comment.author}{" "}
+                        {formatDistanceToNow(new Date(comment.date))} ago
                     </Typography>
                 </Paper>
             );
