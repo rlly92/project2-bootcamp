@@ -1,19 +1,11 @@
 import React, { createContext, useEffect, useState } from "react";
 
-import { onChildAdded, ref as dbRef, onChildChanged } from "firebase/database";
-import { database, storage, auth } from "./firebase";
+import { auth } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
-import {
-    BrowserRouter,
-    Route,
-    Routes,
-    Link,
-    Navigate,
-    useNavigate,
-} from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import "./App.css";
@@ -21,83 +13,12 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 
-const DB_POSTS_KEY = "posts";
-
 export const UserContext = createContext();
 
 const App = () => {
-    const [posts, setPosts] = useState([]);
     const [loggedInUser, setLoggedInUser] = useState(null);
 
     useEffect(() => {
-        const postsRef = dbRef(database, DB_POSTS_KEY);
-
-        onChildAdded(postsRef, (data) => {
-            setPosts((prevPosts) => [
-                ...prevPosts,
-                {
-                    key: data.key,
-                    eventName: data.val().eventName,
-                    geocodeName: data.val().geocodeName,
-                    website: data.val().website,
-                    coords: {
-                        lat: data.val().coords.lat,
-                        lng: data.val().coords.lng,
-                    },
-                    duration: {
-                        startDate: data.val().duration.startDate,
-                        endDate: data.val().duration.endDate,
-                    },
-                    images: data.val().images,
-                    likes: data.val().likes,
-                    dislikes: data.val().dislikes,
-                    type: data.val().type,
-                    tags: data.val().tags,
-                    comments: data.val().comments,
-                    author: data.val().author,
-                    date: data.val().date,
-                },
-            ]);
-        });
-
-        onChildChanged(postsRef, (data) => {
-            setPosts((prevPosts) => {
-                let changedPost = prevPosts.find(
-                    (post) => post.key === data.key
-                );
-                let index = prevPosts.indexOf(changedPost);
-                console.log(index);
-                let copy = [...prevPosts];
-                console.log("before: ");
-                console.log(copy);
-                copy.splice(index, 1, {
-                    key: data.key,
-                    eventName: data.val().eventName,
-                    geocodeName: data.val().geocodeName,
-                    website: data.val().website,
-                    coords: {
-                        lat: data.val().coords.lat,
-                        lng: data.val().coords.lng,
-                    },
-                    duration: {
-                        startDate: data.val().duration.startDate,
-                        endDate: data.val().duration.endDate,
-                    },
-                    images: data.val().images,
-                    likes: data.val().likes,
-                    dislikes: data.val().dislikes,
-                    type: data.val().type,
-                    tags: data.val().tags,
-                    comments: data.val().comments,
-                    author: data.val().author,
-                    date: data.val().date,
-                });
-                console.log("after: ");
-                console.log(copy);
-                return copy;
-            });
-        });
-
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log("user is signed in");
@@ -146,22 +67,19 @@ const App = () => {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/">
-                            <Route index element={<LoginPage />} />
-
                             <Route
-                                path="home"
+                                index
                                 element={
                                     <RequireAuth
-                                        redirectTo="/"
+                                        redirectTo="/login"
                                         user={loggedInUser}
                                     >
-                                        <Home
-                                            posts={posts}
-                                            handleLogOut={handleLogOut}
-                                        />
+                                        <Home handleLogOut={handleLogOut} />
                                     </RequireAuth>
                                 }
                             />
+
+                            <Route path="login" element={<LoginPage />} />
 
                             <Route path="signup" element={<SignUpPage />} />
                         </Route>

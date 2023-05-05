@@ -1,7 +1,8 @@
 import { Paper, Typography } from "@mui/material";
 import format from "date-fns/format";
-import React from "react";
+import React, { useEffect } from "react";
 import LikesDislikesBar from "./LikesDislikesBar";
+import CommentsSection from "./CommentsSection";
 
 function SideInfo({ selectedPost }) {
     return (
@@ -22,7 +23,7 @@ function SideInfo({ selectedPost }) {
             </Typography>
             <Typography variant="body2">Type: {selectedPost.type}</Typography>
             <Typography>Tags:</Typography>
-            <Typography>Comments: {selectedPost.comments}</Typography>
+            <CommentsSection selectedPost={selectedPost} />
         </Paper>
     );
 }

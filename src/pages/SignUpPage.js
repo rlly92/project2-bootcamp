@@ -14,10 +14,6 @@ const SignUpPage = () => {
 
     const context = useContext(UserContext);
 
-    useEffect(() => {
-        if (context.loggedInUser != null) navigate("/home");
-    }, [context.loggedInUser]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -30,7 +26,7 @@ const SignUpPage = () => {
                 setState({ emailInput: "", passwordInput: "" });
             })
             .then(() => {
-                navigate("/home");
+                navigate("/");
             });
     };
 
