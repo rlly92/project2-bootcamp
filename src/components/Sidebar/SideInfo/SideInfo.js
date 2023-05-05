@@ -3,13 +3,14 @@ import format from "date-fns/format";
 import React, { useEffect } from "react";
 import LikesDislikesBar from "./LikesDislikesBar";
 import CommentsSection from "./CommentsSection";
+import ImageCarousel from "./ImageCarousel";
 
 function SideInfo({ selectedPost }) {
     return (
         <Paper sx={{ py: 3, px: 1, width: "100%" }}>
             <Typography variant="h4">{selectedPost.eventName}</Typography>
             <Typography variant="subtitle2">
-                Posted by {selectedPost.author} on{" "}
+                Posted by {selectedPost.authorDisplayName} on{" "}
                 {new Date(selectedPost.date).toLocaleString("en-SG")}
             </Typography>
             <LikesDislikesBar selectedPost={selectedPost} />
@@ -21,6 +22,7 @@ function SideInfo({ selectedPost }) {
                 From {format(new Date(selectedPost.duration.startDate), "PPP")}{" "}
                 to {format(new Date(selectedPost.duration.endDate), "PPP")}
             </Typography>
+            <ImageCarousel selectedPost={selectedPost} />
             <Typography variant="body2">Type: {selectedPost.type}</Typography>
             <Typography>Tags:</Typography>
             <CommentsSection selectedPost={selectedPost} />

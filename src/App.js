@@ -1,3 +1,4 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import React, { createContext, useEffect, useState } from "react";
 
 import { auth } from "./firebase";
