@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,12 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const context = useContext(UserContext);
+
+    useEffect(() => {
+        if (context.loggedInUser != null) {
+            navigate("/");
+        }
+    }, [context.loggedInUser]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
