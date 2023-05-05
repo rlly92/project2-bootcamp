@@ -77,7 +77,8 @@ function Home({ handleLogOut }) {
                     type: data.val().type,
                     tags: data.val().tags,
                     comments: data.val().comments,
-                    author: data.val().author,
+                    authorDisplayName: data.val().authorDisplayName,
+                    authorUid: data.val().uid,
                     date: data.val().date,
                 },
             ]);
@@ -110,20 +111,27 @@ function Home({ handleLogOut }) {
                     type: data.val().type,
                     tags: data.val().tags,
                     comments: data.val().comments,
-                    author: data.val().author,
+                    authorDisplayName: data.val().authorDisplayName,
+                    authorUid: data.val().uid,
                     date: data.val().date,
                 });
                 return [...copy];
             });
-            setPosts((prevPosts) => [...prevPosts]);
-            console.log("child changed");
         });
     }, []);
 
-    // const { isLoaded } = useJsApiLoader({
-    //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-    //     libraries: libraries,
-    // });
+    useEffect(() => {
+        // find the selected post and update it
+        if (selectedPost == null) return;
+
+        const updatedPost = posts.find((post) => post.key === selectedPost.key);
+        setSelectedPost(updatedPost);
+    }, [posts]);
+
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+        libraries: libraries,
+    });
 
     // const coords = useMemo(() => ({ lat: 1.3521, lng: 103.8198 }), []);
     const mapRef = useRef();
@@ -183,9 +191,9 @@ function Home({ handleLogOut }) {
         handleLogOut().then(() => navigate("/"));
     };
 
-    // if (!isLoaded) {
-    //     return <Typography variant="h1">Loading...</Typography>;
-    // }
+    if (!isLoaded) {
+        return <Typography variant="h1">Loading...</Typography>;
+    }
 
     return (
         <Box
@@ -244,13 +252,12 @@ function Home({ handleLogOut }) {
                     <BazaarForm
                         geocodeName={nameAtMarkerCoords}
                         markerCoords={markerCoords}
-                        author="Timmy"
                         clearForm={clearForm}
                     />
                 )}
             </SidebarWrapper>
 
-            {/* <GoogleMap
+            <GoogleMap
                 center={coords}
                 zoom={13}
                 mapContainerStyle={{ width: "100%", height: "100%" }}
@@ -271,7 +278,7 @@ function Home({ handleLogOut }) {
                             }}
                         />
                     ))}
-            </GoogleMap> */}
+            </GoogleMap>
         </Box>
     );
 }
