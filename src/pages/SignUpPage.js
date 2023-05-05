@@ -14,6 +14,12 @@ const SignUpPage = () => {
 
     const context = useContext(UserContext);
 
+    useEffect(() => {
+        if (context.loggedInUser != null) {
+            navigate("enterUsername");
+        }
+    }, [context.loggedInUser]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
 

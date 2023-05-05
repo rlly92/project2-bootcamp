@@ -12,6 +12,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import CreateProfile from "./pages/CreateProfile";
 
 export const UserContext = createContext();
 
@@ -82,6 +83,11 @@ const App = () => {
                             <Route path="login" element={<LoginPage />} />
 
                             <Route path="signup" element={<SignUpPage />} />
+
+                            <Route
+                                path="enterUsername"
+                                element={<CreateProfile />}
+                            />
                         </Route>
                     </Routes>
                 </BrowserRouter>
