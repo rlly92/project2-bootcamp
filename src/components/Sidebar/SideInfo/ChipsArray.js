@@ -22,6 +22,7 @@ export default function ChipsArray({ tags }) {
                 m: 0,
             }}
             component="ul"
+            elevation={0}
         >
             {keysArray.map((key) => {
                 return (

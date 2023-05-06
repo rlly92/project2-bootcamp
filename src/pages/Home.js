@@ -201,7 +201,7 @@ function Home({ handleLogOut }) {
     return (
         <Box
             width={"100vw"}
-            height={"100vh"}
+            height={"100%"}
             display={"flex"}
             flexDirection={"row"}
             textAlign={"center"}
@@ -210,7 +210,7 @@ function Home({ handleLogOut }) {
                 <Typography variant="body1">
                     Type in a place or click on the map to get started
                 </Typography>
-                <TextField variant="outlined" size="small" />
+                {/* <TextField variant="outlined" size="small" /> */}
                 {markerCoords && (
                     <>
                         <Typography variant="h3">Current position:</Typography>
