@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import CreateProfile from "./pages/CreateProfile";
+import NavBar from "./pages/NavBar";
 
 export const UserContext = createContext();
 
@@ -68,7 +69,10 @@ const App = () => {
             <UserContext.Provider value={context}>
                 <BrowserRouter>
                     <Routes>
-                        <Route path="/">
+                        <Route
+                            path="/"
+                            element={<NavBar handleLogOut={handleLogOut} />}
+                        >
                             <Route
                                 index
                                 element={

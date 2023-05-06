@@ -52,6 +52,8 @@ function Home({ handleLogOut }) {
 
     const navigate = useNavigate();
 
+    // WRITE OUT useEffect function to check for displayName, if don't have, redirect to CreateProfile.js
+
     useEffect(() => {
         const postsRef = dbRef(database, DB_POSTS_KEY);
 
@@ -187,10 +189,6 @@ function Home({ handleLogOut }) {
         setShowBazaarForm(false);
     };
 
-    const handleLogOutAndNavigate = () => {
-        handleLogOut().then(() => navigate("/"));
-    };
-
     if (!isLoaded) {
         return <Typography variant="h1">Loading...</Typography>;
     }
@@ -205,14 +203,6 @@ function Home({ handleLogOut }) {
         >
             <SidebarWrapper>
                 Welcome back {displayName}
-                <Button
-                    variant="contained"
-                    sx={{ width: "50%", m: 1 }}
-                    onClick={handleLogOutAndNavigate}
-                    type="button"
-                >
-                    Log Out
-                </Button>
                 <Typography variant="body1">
                     Type in a place or click on the map to get started
                 </Typography>
