@@ -1,4 +1,5 @@
 import {
+    Box,
     Button,
     FormControl,
     InputLabel,
@@ -6,6 +7,7 @@ import {
     Select,
     Stack,
     TextField,
+    Typography,
 } from "@mui/material";
 import React, { useState, useContext } from "react";
 
@@ -21,9 +23,12 @@ import {
     getDownloadURL,
     uploadBytesResumable,
 } from "firebase/storage";
+import isBefore from "date-fns/isBefore";
 
 const DB_POSTS_KEY = "posts";
 const STORAGE_IMAGES_KEY = "images";
+
+const typeOptions = [{ value: "Pasar Malam" }, { value: "Pop Up Store" }];
 
 /* <TextField id="outlined-basic" label="name" variant="outlined" size="small" />; */
 
@@ -37,8 +42,15 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
         tags: "",
     });
 
-    const [file, setFile] = useState(null);
-    const [tags, setTags] = useState([]);
+    const [file, setFile] = useState([]);
+    const [tags, setTags] = useState([
+        "🅿 Easy Parking",
+        "👪 Family Friendly",
+        "✨ Great Atmosphere",
+    ]);
+
+    const [fileErrorText, setFileErrorText] = useState("");
+    const [tagsErrorText, setTagsErrorText] = useState("");
 
     const context = useContext(UserContext);
 
@@ -143,11 +155,12 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
     };
 
     const handleFileChange = (newFile) => {
-        console.log(newFile);
+        setFileErrorText("");
         setFile(newFile);
     };
 
     const handleTagsChange = (newTags) => {
+        setTagsErrorText("");
         setTags(newTags);
     };
 
@@ -163,6 +176,32 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        let haveError = false;
+        // check dates
+        if (
+            formInputs.endDate &&
+            formInputs.startDate &&
+            isBefore(
+                new Date(formInputs.endDate),
+                new Date(formInputs.startDate)
+            )
+        )
+            haveError = true;
+
+        // check image
+        if (file == null || file.length === 0) {
+            setFileErrorText("Choose at least 1 image please!");
+            haveError = true;
+        }
+
+        // check tags
+        if (tags.length < 3) {
+            setTagsErrorText("Enter at least 3 features please!");
+            haveError = true;
+        }
+
+        if (haveError) return;
+
         const postListRef = dbRef(database, DB_POSTS_KEY);
         const newPostRef = push(postListRef);
         const newPostKey = newPostRef.key;
@@ -177,7 +216,7 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
     };
 
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <Stack spacing={1} p={2} alignItems={"flex-start"}>
                 <TextField
                     required
@@ -187,60 +226,123 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
                     size="small"
                     value={formInputs.eventName}
                     onChange={handleChange}
+                    helperText="What is the name of the event?"
                 />
                 <TextField
                     name="website"
-                    label="Website"
-                    placeholder="Optional"
+                    label="Website (Optional)"
                     variant="outlined"
                     size="small"
                     value={formInputs.website}
                     onChange={handleChange}
+                    helperText="Does the event have a website?"
                 />
-                <TextField
-                    required
-                    name="startDate"
-                    type="date"
-                    variant="outlined"
-                    size="small"
-                    value={formInputs.startDate}
-                    onChange={handleChange}
-                />
-                <TextField
-                    required
-                    name="endDate"
-                    type="date"
-                    variant="outlined"
-                    size="small"
-                    value={formInputs.endDate}
-                    onChange={handleChange}
-                />
+                <Stack direction={"row"} spacing={2}>
+                    <TextField
+                        required
+                        name="startDate"
+                        type="date"
+                        variant="outlined"
+                        size="small"
+                        value={formInputs.startDate}
+                        onChange={handleChange}
+                        helperText={
+                            formInputs.endDate &&
+                            formInputs.startDate &&
+                            isBefore(
+                                new Date(formInputs.endDate),
+                                new Date(formInputs.startDate)
+                            )
+                                ? "Check your dates!"
+                                : "When does/did it start?"
+                        }
+                        error={
+                            formInputs.endDate &&
+                            formInputs.startDate &&
+                            isBefore(
+                                new Date(formInputs.endDate),
+                                new Date(formInputs.startDate)
+                            )
+                                ? true
+                                : false
+                        }
+                    />
+                    <TextField
+                        required
+                        name="endDate"
+                        type="date"
+                        variant="outlined"
+                        size="small"
+                        value={formInputs.endDate}
+                        onChange={handleChange}
+                        helperText={
+                            formInputs.endDate &&
+                            formInputs.startDate &&
+                            isBefore(
+                                new Date(formInputs.endDate),
+                                new Date(formInputs.startDate)
+                            )
+                                ? "Check your dates!"
+                                : "When does it end?"
+                        }
+                        error={
+                            formInputs.endDate &&
+                            formInputs.startDate &&
+                            isBefore(
+                                new Date(formInputs.endDate),
+                                new Date(formInputs.startDate)
+                            )
+                                ? true
+                                : false
+                        }
+                    />
+                </Stack>
                 <MuiFileInput
+                    size="small"
                     value={file}
                     onChange={handleFileChange}
+                    placeholder="Click here to choose images"
                     multiple
+                    helperText={
+                        fileErrorText
+                            ? fileErrorText
+                            : "You can choose to upload multiple images!"
+                    }
+                    error={fileErrorText ? true : false}
                 />
-                <div>
-                    <FormControl size="small">
-                        <InputLabel id="type">Type</InputLabel>
-                        <Select
-                            required
-                            labelId="type"
-                            name="type"
-                            label="type"
-                            value={formInputs.type}
-                            onChange={handleChange}
-                        >
-                            <MenuItem value="Pasar Malam">Pasar Malam</MenuItem>
-                            <MenuItem value="Pop Up Store">
-                                Pop Up Store
+                <TextField
+                    select
+                    required
+                    size="small"
+                    name="type"
+                    label="Type"
+                    value={formInputs.type}
+                    onChange={handleChange}
+                    helperText="What type of event is this?"
+                >
+                    {typeOptions.map((option) => {
+                        return (
+                            <MenuItem value={option.value} key={option.value}>
+                                {option.value}
                             </MenuItem>
-                        </Select>
-                    </FormControl>
-                </div>
-                <MuiChipsInput value={tags} onChange={handleTagsChange} />
+                        );
+                    })}
+                </TextField>
+
+                <MuiChipsInput
+                    size="small"
+                    value={tags}
+                    onChange={handleTagsChange}
+                    clearInputOnBlur
+                    error={tagsErrorText ? true : false}
+                    helperText={
+                        tagsErrorText
+                            ? tagsErrorText
+                            : "What are some features of the event?"
+                    }
+                />
             </Stack>
-            <Button type="submit" variant="contained" onClick={handleSubmit}>
+            <Button type="submit" variant="contained">
                 Submit
             </Button>
         </form>

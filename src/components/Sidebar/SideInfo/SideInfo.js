@@ -16,23 +16,38 @@ function SideInfo({ selectedPost }) {
             }}
         >
             <Typography variant="h4">{selectedPost.eventName}</Typography>
+
             <Typography variant="subtitle2">
                 Posted by {selectedPost.authorDisplayName} on{" "}
                 {new Date(selectedPost.date).toLocaleString("en-SG")}
             </Typography>
+
             <LikesDislikesBar selectedPost={selectedPost} />
-            <Typography variant="body2">
-                Homepage: {selectedPost.website}
-            </Typography>
+
+            {selectedPost.website ? (
+                <Typography variant="body2">
+                    Homepage: {selectedPost.website}
+                </Typography>
+            ) : (
+                <Typography variant="body2">
+                    No website was provided.
+                </Typography>
+            )}
+
             <Typography variant="h5">📍 {selectedPost.geocodeName}</Typography>
+
             <Typography variant="h6">
                 From {format(new Date(selectedPost.duration.startDate), "PPP")}{" "}
                 to {format(new Date(selectedPost.duration.endDate), "PPP")}
             </Typography>
+
             <ImageCarousel selectedPost={selectedPost} />
+
             <Typography variant="body2">Type: {selectedPost.type}</Typography>
+
             <Typography>Tags:</Typography>
             <ChipsArray tags={selectedPost.tags} />
+
             <CommentsSection selectedPost={selectedPost} />
         </Paper>
     );
