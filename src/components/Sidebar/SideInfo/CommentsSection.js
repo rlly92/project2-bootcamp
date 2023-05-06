@@ -1,10 +1,18 @@
-import { Button, Paper, TextField, Typography } from "@mui/material";
+import {
+    Button,
+    IconButton,
+    InputAdornment,
+    Paper,
+    TextField,
+    Typography,
+} from "@mui/material";
 import { ref as dbRef, push, set, update } from "firebase/database";
 import { database } from "../../../firebase";
 import React, { useContext, useState } from "react";
 
 import { UserContext } from "../../../App";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { Send } from "@mui/icons-material";
 
 const DB_POSTS_KEY = "posts";
 
@@ -74,6 +82,15 @@ function CommentsSection({ selectedPost }) {
                     onChange={handleChange}
                     fullWidth
                     multiline
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton type="submit" size="small">
+                                    <Send fontSize="small" />
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
                 />
             </form>
             {commentRender}
