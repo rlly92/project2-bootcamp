@@ -207,7 +207,6 @@ function Home({ handleLogOut }) {
             textAlign={"center"}
         >
             <SidebarWrapper>
-                Welcome back {displayName}
                 <Typography variant="body1">
                     Type in a place or click on the map to get started
                 </Typography>

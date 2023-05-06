@@ -3,13 +3,7 @@ import { getAuth, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
 
-import {
-    ref as dbRef,
-    onChildAdded,
-    onChildChanged,
-    push,
-    remove,
-} from "firebase/database";
+import { ref as dbRef, push } from "firebase/database";
 import { database } from "../firebase";
 
 const DB_USERINFO_KEY = "user_info";

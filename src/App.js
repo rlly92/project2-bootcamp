@@ -2,7 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { createContext, useEffect, useState } from "react";
 
 import { auth } from "./firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut, getAuth } from "firebase/auth";
+import { ref as dbRef } from "firebase/database";
 
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
@@ -16,10 +17,12 @@ import SignUpPage from "./pages/SignUpPage";
 import CreateProfile from "./pages/CreateProfile";
 import NavBar from "./pages/NavBar";
 
+const DB_USERINFO_KEY = "user_info";
 export const UserContext = createContext();
 
 const App = () => {
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const [currentUserInfo, setUserInfo] = useState(null);
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -32,6 +35,8 @@ const App = () => {
             }
         });
     }, []);
+
+    console.log(loggedInUser);
 
     function RequireAuth({ children, redirectTo, user }) {
         return user != null ? children : <Navigate to={redirectTo} />;
