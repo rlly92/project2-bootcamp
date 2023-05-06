@@ -3,24 +3,43 @@ import { getAuth, updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
 
+import {
+    ref as dbRef,
+    onChildAdded,
+    onChildChanged,
+    push,
+    remove,
+} from "firebase/database";
+import { database } from "../firebase";
+
+const DB_USERINFO_KEY = "user_info";
+
 function CreateProfile() {
     const navigate = useNavigate();
     const [state, setState] = useState({ displayName: "" });
     const context = useContext(UserContext);
+    const userInfoRef = dbRef(database, DB_USERINFO_KEY);
 
-    // useEffect(() => {
-    //     if (context.loggedInUser != null) {
-    //         navigate("/login");
-    //     }
-    // }, [context.loggedInUser]);
+    //   useEffect(() => {
+    //       if (context.loggedInUser != null) {
+    //           navigate("/");
+    //       }
+    //   }, [context.loggedInUser]);
 
     const addUserName = (displayName) => {
         const auth = getAuth();
         const user = auth.currentUser;
+        const userInfo = {
+            displayName: state.displayName,
+            email: user.email,
+        };
 
         return updateProfile(user, {
             displayName,
         })
+            .then(() => {
+                push(userInfoRef, userInfo);
+            })
             .then(() => {
                 console.log("Profile updated successfully!");
             })
