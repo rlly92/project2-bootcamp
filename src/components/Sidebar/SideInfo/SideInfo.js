@@ -13,8 +13,6 @@ function SideInfo({ selectedPost }) {
                 py: 3,
                 px: 1,
                 width: "100%",
-                height: "100%",
-                overflowY: "auto",
             }}
         >
             <Typography variant="h4">{selectedPost.eventName}</Typography>
