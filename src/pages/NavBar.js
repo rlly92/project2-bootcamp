@@ -32,7 +32,7 @@ const NavBar = ({ handleLogOut }) => {
                     <Stack direction="row" spacing={2}>
                         <Button
                             variant="contained"
-                            sx={{ width: "50%", m: 1 }}
+                            // sx={{ width: "50%", m: 1 }}
                             onClick={handleLogOutAndNavigate}
                             type="button"
                         >
