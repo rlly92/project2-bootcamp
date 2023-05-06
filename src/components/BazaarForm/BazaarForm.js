@@ -15,6 +15,7 @@ import { ref as dbRef, push, set } from "firebase/database";
 import { database, storage } from "../../firebase";
 import { toast } from "react-toastify";
 import { MuiFileInput } from "mui-file-input";
+import { MuiChipsInput } from "mui-chips-input";
 import {
     ref as sRef,
     getDownloadURL,
@@ -37,6 +38,7 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
     });
 
     const [file, setFile] = useState(null);
+    const [tags, setTags] = useState([]);
 
     const context = useContext(UserContext);
 
@@ -77,7 +79,18 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
         return images;
     };
 
-    const writeData = async (imageObj, newPostRef) => {
+    const makeArrIntoObj = (arr) => {
+        const newObj = {};
+        arr.forEach((item) => {
+            newObj[crypto.randomUUID()] = {
+                authorUid: context.loggedInUser.uid,
+                text: item,
+            };
+        });
+        return newObj;
+    };
+
+    const writeData = async (imageObj, newPostRef, tagsObj) => {
         try {
             await set(newPostRef, {
                 eventName: formInputs.eventName,
@@ -95,7 +108,7 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
                 likes: 0,
                 dislikes: 0,
                 type: formInputs.type,
-                tags: formInputs.tags,
+                tags: tagsObj,
                 comments: 0,
                 authorDisplayName: context.loggedInUser.displayName,
                 authorUid: context.loggedInUser.uid,
@@ -134,6 +147,10 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
         setFile(newFile);
     };
 
+    const handleTagsChange = (newTags) => {
+        setTags(newTags);
+    };
+
     const handleChange = (e) => {
         setFormInputs((prevInputs) => {
             return {
@@ -149,11 +166,12 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
         const postListRef = dbRef(database, DB_POSTS_KEY);
         const newPostRef = push(postListRef);
         const newPostKey = newPostRef.key;
+        const tagsObj = makeArrIntoObj(tags);
 
         const images = await uploadFile(file, newPostKey);
         console.log("in handleSubmit");
         console.log(images);
-        await writeData(images, newPostRef);
+        await writeData(images, newPostRef, tagsObj);
 
         clearForm();
     };
@@ -197,7 +215,6 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
                     value={formInputs.endDate}
                     onChange={handleChange}
                 />
-
                 <MuiFileInput
                     value={file}
                     onChange={handleFileChange}
@@ -221,14 +238,7 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
                         </Select>
                     </FormControl>
                 </div>
-                <TextField
-                    label="tags"
-                    name="tags"
-                    variant="outlined"
-                    size="small"
-                    value={formInputs.tags}
-                    onChange={handleChange}
-                />
+                <MuiChipsInput value={tags} onChange={handleTagsChange} />
             </Stack>
             <Button type="submit" variant="contained" onClick={handleSubmit}>
                 Submit

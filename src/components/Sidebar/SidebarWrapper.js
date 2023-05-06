@@ -3,7 +3,7 @@ import React from "react";
 
 function SidebarWrapper({ children }) {
     return (
-        <Box width={"35%"} p={3}>
+        <Box width={"35%"} p={3} sx={{ overflowY: "auto" }}>
             <Stack
                 direction={"row"}
                 textAlign={"center"}
