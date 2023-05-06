@@ -21,6 +21,9 @@ const NavBar = ({ handleLogOut }) => {
     const signUpButton = () => {
         navigate("/login/signup");
     };
+    const bazzingaButton = () => {
+        navigate("/");
+    };
 
     return (
         <>
@@ -34,7 +37,14 @@ const NavBar = ({ handleLogOut }) => {
                         component="div"
                         sx={{ flexGrow: 1 }}
                     >
-                        BAZZINGA
+                        <Button
+                            variant="contained"
+                            sx={{ width: "10%", m: 1 }}
+                            onClick={bazzingaButton}
+                            type="button"
+                        >
+                            BAZZINGA
+                        </Button>
                     </Typography>
                     <Stack direction="row" spacing={2}>
                         {context.loggedInUser != null ? (
