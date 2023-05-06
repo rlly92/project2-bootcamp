@@ -1,8 +1,9 @@
-/* .App {
-    min-height: 100vh;
-    min-width: 100vh;
+.App {
+    height: 100vh;
     overflow: hidden;
-} */
+}
+/* overflow: hidden;
+}
 
 /* .App-logo {
   height: 40vmin;
