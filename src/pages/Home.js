@@ -52,8 +52,7 @@ function Home({ handleLogOut }) {
 
     const navigate = useNavigate();
 
-    // WRITE OUT useEffect function to check for displayName, if don't have, redirect to CreateProfile.js
-
+    // useEffect function to check for displayName, if don't have, redirect to CreateProfile.js
     useEffect(() => {
         if (displayName == null) {
             navigate("/createprofile");

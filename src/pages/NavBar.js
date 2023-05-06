@@ -1,3 +1,5 @@
+import React, { useContext } from "react";
+import { UserContext } from "../App";
 import {
     AppBar,
     Toolbar,
@@ -11,8 +13,13 @@ import { useNavigate, Outlet } from "react-router-dom";
 const NavBar = ({ handleLogOut }) => {
     const navigate = useNavigate();
 
+    const context = useContext(UserContext);
+
     const handleLogOutAndNavigate = () => {
         handleLogOut().then(() => navigate("/login"));
+    };
+    const signUpButton = () => {
+        navigate("/login/signup");
     };
 
     return (
@@ -30,14 +37,25 @@ const NavBar = ({ handleLogOut }) => {
                         BAZZINGA
                     </Typography>
                     <Stack direction="row" spacing={2}>
-                        <Button
-                            variant="contained"
-                            sx={{ width: "50%", m: 1 }}
-                            onClick={handleLogOutAndNavigate}
-                            type="button"
-                        >
-                            Log Out
-                        </Button>
+                        {context.loggedInUser != null ? (
+                            <Button
+                                variant="contained"
+                                sx={{ width: "50%", m: 1 }}
+                                onClick={handleLogOutAndNavigate}
+                                type="button"
+                            >
+                                Log Out
+                            </Button>
+                        ) : (
+                            <Button
+                                variant="contained"
+                                sx={{ width: "50%", m: 1 }}
+                                onClick={signUpButton}
+                                type="button"
+                            >
+                                Sign Up
+                            </Button>
+                        )}
                     </Stack>
                 </Toolbar>
             </AppBar>
