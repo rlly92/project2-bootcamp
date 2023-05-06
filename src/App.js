@@ -93,7 +93,7 @@ const App = () => {
                             />
 
                             <Route
-                                path="enterUsername"
+                                path="createprofile"
                                 element={<CreateProfile />}
                             />
                         </Route>

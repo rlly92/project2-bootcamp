@@ -27,7 +27,7 @@ const NavBar = ({ handleLogOut }) => {
                         component="div"
                         sx={{ flexGrow: 1 }}
                     >
-                        BIZZBAZZ
+                        BAZZINGA
                     </Typography>
                     <Stack direction="row" spacing={2}>
                         <Button

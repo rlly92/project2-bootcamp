@@ -32,7 +32,7 @@ const SignUpPage = () => {
                 setState({ emailInput: "", passwordInput: "" });
             })
             .then(() => {
-                navigate("/enterUsername");
+                navigate("/createprofile");
             });
     };
 
