@@ -11,7 +11,6 @@ import { UserContext } from "../App";
 const SignUpPage = () => {
     const [state, setState] = useState({ emailInput: "", passwordInput: "" });
     const navigate = useNavigate();
-
     const context = useContext(UserContext);
 
     useEffect(() => {
@@ -32,7 +31,7 @@ const SignUpPage = () => {
                 setState({ emailInput: "", passwordInput: "" });
             })
             .then(() => {
-                navigate("/enterUsername");
+                navigate("/createprofile");
             });
     };
 

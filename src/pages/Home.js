@@ -52,7 +52,12 @@ function Home({ handleLogOut }) {
 
     const navigate = useNavigate();
 
-    // WRITE OUT useEffect function to check for displayName, if don't have, redirect to CreateProfile.js
+    // useEffect function to check for displayName, if don't have, redirect to CreateProfile.js
+    useEffect(() => {
+        if (displayName == null) {
+            navigate("/createprofile");
+        }
+    }, [displayName]);
 
     useEffect(() => {
         const postsRef = dbRef(database, DB_POSTS_KEY);
@@ -202,7 +207,6 @@ function Home({ handleLogOut }) {
             textAlign={"center"}
         >
             <SidebarWrapper>
-                Welcome back {displayName}
                 <Typography variant="body1">
                     Type in a place or click on the map to get started
                 </Typography>
