@@ -61,6 +61,7 @@ function SideInfo({ selectedPost }) {
             <Typography>Tags:</Typography>
             <ChipsArray tags={selectedPost.tags} />
 
+            <Typography variant="h5">Comments:</Typography>
             <CommentsSection selectedPost={selectedPost} />
         </Paper>
     );

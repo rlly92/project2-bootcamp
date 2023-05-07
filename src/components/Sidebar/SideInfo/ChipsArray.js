@@ -15,7 +15,7 @@ export default function ChipsArray({ tags }) {
         <Paper
             sx={{
                 display: "flex",
-                justifyContent: "center",
+                // justifyContent: "center",
                 flexWrap: "wrap",
                 listStyle: "none",
                 p: 0.5,

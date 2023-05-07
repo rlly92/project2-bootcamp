@@ -12,6 +12,7 @@
     "bootstrap": "^5.2.3",
     "date-fns": "^2.30.0",
     "firebase": "^9.21.0",
+    "lightgallery": "^2.7.1",
     "mui-chips-input": "^2.0.1",
     "mui-file-input": "^2.0.0",
     "mui-image": "^1.0.7",

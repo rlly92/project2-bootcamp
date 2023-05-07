@@ -111,7 +111,7 @@ function LikesDislikesBar({ selectedPost }) {
         <Stack
             direction={"row"}
             alignItems={"center"}
-            justifyContent={"center"}
+            // justifyContent={"center"}
         >
             <Button
                 disabled={context.loggedInUser == null || status === "disliked"}
@@ -120,7 +120,7 @@ function LikesDislikesBar({ selectedPost }) {
             >
                 {status === "liked" ? <ThumbUpAlt /> : <ThumbUpOffAlt />}
             </Button>
-            <Typography variant="body1">
+            <Typography variant="subtitle2">
                 {LikesInNumber - DislikesInNumber}
             </Typography>
             <Button
