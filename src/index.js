@@ -13,7 +13,6 @@ import {
     createTheme,
     responsiveFontSizes,
 } from "@mui/material";
-import CurrentPostProvider from "./components/CurrentPostContext/CurrentPostProvider";
 
 let theme = createTheme({
     typography: {

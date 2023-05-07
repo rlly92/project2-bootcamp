@@ -1,6 +1,6 @@
 import { Button, Paper, Typography } from "@mui/material";
 import format from "date-fns/format";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import LikesDislikesBar from "./LikesDislikesBar";
 import CommentsSection from "./CommentsSection";
 import ImageCarousel from "./ImageCarousel";
