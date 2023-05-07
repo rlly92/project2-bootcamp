@@ -39,7 +39,7 @@ const NavBar = ({ handleLogOut }) => {
                     >
                         <Button
                             variant="contained"
-                            sx={{ width: "50%", m: 1 }}
+                            // sx={{ width: "50%", m: 1 }}
                             onClick={bazzingaButton}
                             type="button"
                         >
@@ -68,7 +68,7 @@ const NavBar = ({ handleLogOut }) => {
                         {context.loggedInUser != null ? (
                             <Button
                                 variant="contained"
-                                sx={{ width: "50%", m: 1 }}
+                                // sx={{ width: "50%", m: 1 }}
                                 onClick={handleLogOutAndNavigate}
                                 type="button"
                             >
@@ -77,7 +77,7 @@ const NavBar = ({ handleLogOut }) => {
                         ) : (
                             <Button
                                 variant="contained"
-                                sx={{ width: "50%", m: 1 }}
+                                // sx={{ width: "50%", m: 1 }}
                                 onClick={signUpButton}
                                 type="button"
                             >

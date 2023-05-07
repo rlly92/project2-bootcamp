@@ -1,12 +1,24 @@
-import { Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography } from "@mui/material";
 import format from "date-fns/format";
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import LikesDislikesBar from "./LikesDislikesBar";
 import CommentsSection from "./CommentsSection";
 import ImageCarousel from "./ImageCarousel";
 import ChipsArray from "./ChipsArray";
 
+import { currentPostContext } from "../../CurrentPostContext/CurrentPostProvider";
+import { useNavigate } from "react-router-dom";
+
 function SideInfo({ selectedPost }) {
+    const context = useContext(currentPostContext);
+    const navigate = useNavigate();
+    console.log(context);
+
+    const handleViewMore = () => {
+        console.log(context);
+        navigate(`/post/${selectedPost.key}`);
+    };
+
     return (
         <Paper
             sx={{
@@ -15,6 +27,7 @@ function SideInfo({ selectedPost }) {
                 width: "100%",
             }}
         >
+            <Button onClick={handleViewMore}>View More</Button>
             <Typography variant="h4">{selectedPost.eventName}</Typography>
 
             <Typography variant="subtitle2">
