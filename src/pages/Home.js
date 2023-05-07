@@ -10,7 +10,12 @@ import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
 import { useNavigate } from "react-router-dom";
 
-import { ref as dbRef, onChildAdded, onChildChanged } from "firebase/database";
+import {
+    ref as dbRef,
+    off,
+    onChildAdded,
+    onChildChanged,
+} from "firebase/database";
 
 import { database } from "../firebase";
 
@@ -49,6 +54,8 @@ function Home({ handleLogOut }) {
     // Context and display name variables:
     const context = useContext(UserContext);
     const displayName = context.loggedInUser.displayName;
+
+    const viewMoreContext = useContext();
 
     const navigate = useNavigate();
 
@@ -125,6 +132,12 @@ function Home({ handleLogOut }) {
                 return [...copy];
             });
         });
+
+        console.log("Home is mounted");
+        return () => {
+            console.log("removing listeners");
+            postsRef.off();
+        };
     }, []);
 
     useEffect(() => {

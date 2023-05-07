@@ -16,6 +16,8 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import CreateProfile from "./pages/CreateProfile";
 import NavBar from "./pages/NavBar";
+import CurrentPostProvider from "./components/CurrentPostContext/CurrentPostProvider";
+import ViewMore from "./pages/ViewMore";
 
 const DB_USERINFO_KEY = "user_info";
 export const UserContext = createContext();
@@ -72,38 +74,42 @@ const App = () => {
                 theme="dark"
             />
             <UserContext.Provider value={context}>
-                <BrowserRouter>
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={<NavBar handleLogOut={handleLogOut} />}
-                        >
+                <CurrentPostProvider>
+                    <BrowserRouter>
+                        <Routes>
                             <Route
-                                index
-                                element={
-                                    <RequireAuth
-                                        redirectTo="login"
-                                        user={loggedInUser}
-                                    >
-                                        <Home handleLogOut={handleLogOut} />
-                                    </RequireAuth>
-                                }
-                            />
+                                path="/"
+                                element={<NavBar handleLogOut={handleLogOut} />}
+                            >
+                                <Route
+                                    index
+                                    element={
+                                        <RequireAuth
+                                            redirectTo="login"
+                                            user={loggedInUser}
+                                        >
+                                            <Home handleLogOut={handleLogOut} />
+                                        </RequireAuth>
+                                    }
+                                />
 
-                            <Route path="login" element={<LoginPage />} />
+                                <Route path="login" element={<LoginPage />} />
 
-                            <Route
-                                path="/login/signup"
-                                element={<SignUpPage />}
-                            />
+                                <Route
+                                    path="/login/signup"
+                                    element={<SignUpPage />}
+                                />
 
-                            <Route
-                                path="createprofile"
-                                element={<CreateProfile />}
-                            />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
+                                <Route
+                                    path="createprofile"
+                                    element={<CreateProfile />}
+                                />
+
+                                <Route path="/post" element={<ViewMore />} />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </CurrentPostProvider>
             </UserContext.Provider>
         </div>
     );
