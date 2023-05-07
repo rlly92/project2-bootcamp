@@ -118,6 +118,8 @@ function Home({ handleLogOut }) {
         return <Typography variant="h1">Loading...</Typography>;
     }
 
+    if (isLoaded) console.log("Google maps loaded");
+
     return (
         <Box
             width={"100vw"}

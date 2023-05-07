@@ -14,6 +14,10 @@ import {
     responsiveFontSizes,
 } from "@mui/material";
 
+import "lightgallery/css/lightgallery.css";
+import "lightgallery/css/lg-zoom.css";
+import "lightgallery/css/lg-thumbnail.css";
+
 let theme = createTheme({
     typography: {
         h1: {

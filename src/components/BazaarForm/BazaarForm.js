@@ -147,6 +147,7 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
     const handleFileChange = (newFile) => {
         setFileErrorText("");
         setFile(newFile);
+        console.log(file);
     };
 
     const handleTagsChange = (newTags) => {
