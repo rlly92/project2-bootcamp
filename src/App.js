@@ -105,7 +105,10 @@ const App = () => {
                                     element={<CreateProfile />}
                                 />
 
-                                <Route path="/post" element={<ViewMore />} />
+                                <Route
+                                    path="post/:postId"
+                                    element={<ViewMore />}
+                                />
                             </Route>
                         </Routes>
                     </BrowserRouter>

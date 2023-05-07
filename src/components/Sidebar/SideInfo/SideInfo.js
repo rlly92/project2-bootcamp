@@ -12,10 +12,11 @@ import { useNavigate } from "react-router-dom";
 function SideInfo({ selectedPost }) {
     const context = useContext(currentPostContext);
     const navigate = useNavigate();
+    console.log(context);
 
     const handleViewMore = () => {
-        context.setCurrentPost(selectedPost);
-        navigate(`/post`);
+        console.log(context);
+        navigate(`/post/${selectedPost.key}`);
     };
 
     return (

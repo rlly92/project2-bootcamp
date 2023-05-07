@@ -13,6 +13,7 @@ import {
     createTheme,
     responsiveFontSizes,
 } from "@mui/material";
+import CurrentPostProvider from "./components/CurrentPostContext/CurrentPostProvider";
 
 let theme = createTheme({
     typography: {
@@ -42,7 +43,6 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <ThemeProvider theme={theme}>
         <CssBaseline />
-
         <App />
     </ThemeProvider>
 );

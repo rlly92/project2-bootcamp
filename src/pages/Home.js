@@ -10,15 +10,6 @@ import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-    ref as dbRef,
-    off,
-    onChildAdded,
-    onChildChanged,
-} from "firebase/database";
-
-import { database } from "../firebase";
-
 import { Typography, Box, Button, TextField } from "@mui/material";
 
 import Geocode from "react-geocode";
@@ -30,6 +21,7 @@ import { libraries } from "../googleUtils";
 
 import greenMarker from "../assets/images/permMarkerResized.png";
 import { UserContext } from "../App";
+import { currentPostContext } from "../components/CurrentPostContext/CurrentPostProvider";
 
 const options = {
     // zoomControl: false,
@@ -41,21 +33,18 @@ const options = {
 };
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_MAP_API_KEY);
-const DB_POSTS_KEY = "posts";
 
 function Home({ handleLogOut }) {
     const [coords, setCoords] = useState({ lat: 1.3521, lng: 103.8198 });
     const [markerCoords, setMarkerCoords] = useState(null);
     const [nameAtMarkerCoords, setNameAtMarkerCoords] = useState("");
-    const [selectedPost, setSelectedPost] = useState(null);
     const [showBazaarForm, setShowBazaarForm] = useState(false);
-    const [posts, setPosts] = useState([]);
 
     // Context and display name variables:
     const context = useContext(UserContext);
     const displayName = context.loggedInUser.displayName;
 
-    const viewMoreContext = useContext();
+    const postContext = useContext(currentPostContext);
 
     const navigate = useNavigate();
 
@@ -65,88 +54,6 @@ function Home({ handleLogOut }) {
             navigate("/createprofile");
         }
     }, [displayName]);
-
-    useEffect(() => {
-        const postsRef = dbRef(database, DB_POSTS_KEY);
-
-        onChildAdded(postsRef, (data) => {
-            setPosts((prevPosts) => [
-                ...prevPosts,
-                {
-                    key: data.key,
-                    eventName: data.val().eventName,
-                    geocodeName: data.val().geocodeName,
-                    website: data.val().website,
-                    coords: {
-                        lat: data.val().coords.lat,
-                        lng: data.val().coords.lng,
-                    },
-                    duration: {
-                        startDate: data.val().duration.startDate,
-                        endDate: data.val().duration.endDate,
-                    },
-                    images: data.val().images,
-                    likes: data.val().likes,
-                    dislikes: data.val().dislikes,
-                    type: data.val().type,
-                    tags: data.val().tags,
-                    comments: data.val().comments,
-                    authorDisplayName: data.val().authorDisplayName,
-                    authorUid: data.val().uid,
-                    date: data.val().date,
-                },
-            ]);
-        });
-
-        onChildChanged(postsRef, (data) => {
-            setPosts((prevPosts) => {
-                let changedPost = prevPosts.find(
-                    (post) => post.key === data.key
-                );
-                let index = prevPosts.indexOf(changedPost);
-                console.log(index);
-                let copy = [...prevPosts];
-                copy.splice(index, 1, {
-                    key: data.key,
-                    eventName: data.val().eventName,
-                    geocodeName: data.val().geocodeName,
-                    website: data.val().website,
-                    coords: {
-                        lat: data.val().coords.lat,
-                        lng: data.val().coords.lng,
-                    },
-                    duration: {
-                        startDate: data.val().duration.startDate,
-                        endDate: data.val().duration.endDate,
-                    },
-                    images: data.val().images,
-                    likes: data.val().likes,
-                    dislikes: data.val().dislikes,
-                    type: data.val().type,
-                    tags: data.val().tags,
-                    comments: data.val().comments,
-                    authorDisplayName: data.val().authorDisplayName,
-                    authorUid: data.val().uid,
-                    date: data.val().date,
-                });
-                return [...copy];
-            });
-        });
-
-        console.log("Home is mounted");
-        return () => {
-            console.log("removing listeners");
-            postsRef.off();
-        };
-    }, []);
-
-    useEffect(() => {
-        // find the selected post and update it
-        if (selectedPost == null) return;
-
-        const updatedPost = posts.find((post) => post.key === selectedPost.key);
-        setSelectedPost(updatedPost);
-    }, [posts]);
 
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
@@ -177,7 +84,7 @@ function Home({ handleLogOut }) {
 
     const handleClick = (e) => {
         setNameAtMarkerCoords("");
-        setSelectedPost(null);
+        postContext.setSelectedPost(null);
         setShowBazaarForm(false);
         setMarkerCoords(e.latLng);
     };
@@ -199,7 +106,7 @@ function Home({ handleLogOut }) {
 
     const handleMarkerClick = async (post) => {
         setMarkerCoords(null);
-        setSelectedPost(post);
+        postContext.setSelectedPost(post);
         setShowBazaarForm(false);
     };
 
@@ -254,7 +161,9 @@ function Home({ handleLogOut }) {
                         </Button>
                     </>
                 )}
-                {selectedPost && <SideInfo selectedPost={selectedPost} />}
+                {postContext.selectedPost && (
+                    <SideInfo selectedPost={postContext.selectedPost} />
+                )}
                 {showBazaarForm && (
                     <BazaarForm
                         geocodeName={nameAtMarkerCoords}
@@ -273,8 +182,8 @@ function Home({ handleLogOut }) {
                 onLoad={onLoad}
             >
                 {markerCoords && <Marker position={markerCoords} />}
-                {posts != null &&
-                    posts.map((post) => (
+                {postContext.posts != null &&
+                    postContext.posts.map((post) => (
                         <Marker
                             icon={greenMarker}
                             key={post.key}

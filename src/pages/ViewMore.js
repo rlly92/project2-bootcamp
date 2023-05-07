@@ -1,17 +1,29 @@
-import { Paper, Typography } from "@mui/material";
-import React, { useContext } from "react";
-import { currentPostContext } from "../components/CurrentPostContext/CurrentPostProvider";
+import { CircularProgress, Paper, Typography } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+
 import LikesDislikesBar from "../components/Sidebar/SideInfo/LikesDislikesBar";
 import format from "date-fns/format";
 import ChipsArray from "../components/Sidebar/SideInfo/ChipsArray";
 import CommentsSection from "../components/Sidebar/SideInfo/CommentsSection";
+import { useParams } from "react-router-dom";
+import { currentPostContext } from "../components/CurrentPostContext/CurrentPostProvider";
 
 function ViewMore() {
     const context = useContext(currentPostContext);
-    let selectedPost = context.currentPost;
+    console.log(context);
+    const postId = useParams().postId;
 
-    return (
-        <Typography variant="h1">
+    const [status, setStatus] = useState("loading");
+
+    useEffect(() => {
+        if (context.posts.length !== 0) setStatus("loaded");
+    }, [context.posts]);
+
+    const selectedPost = context.posts.find((post) => post.key === postId);
+    console.log(selectedPost);
+
+    if (status === "loaded")
+        return (
             <Paper
                 sx={{
                     py: 3,
@@ -57,8 +69,14 @@ function ViewMore() {
 
                 <CommentsSection selectedPost={selectedPost} />
             </Paper>
-        </Typography>
-    );
+        );
+    else
+        return (
+            <>
+                <Typography variant="h1">Loading...</Typography>
+                <CircularProgress />
+            </>
+        );
 }
 
 export default ViewMore;

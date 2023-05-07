@@ -18,6 +18,10 @@ function LikesDislikesBar({ selectedPost }) {
     const context = useContext(UserContext);
 
     useEffect(() => {
+        if (context.loggedInUser == null) {
+            setStatus("");
+            return;
+        }
         if (selectedPost !== 0 && selectedPost.likes[context.loggedInUser.uid])
             setStatus("liked");
         else if (
@@ -26,7 +30,7 @@ function LikesDislikesBar({ selectedPost }) {
         )
             setStatus("disliked");
         else setStatus("");
-    }, [context.loggedInUser.uid, selectedPost]);
+    }, [context.loggedInUser, selectedPost]);
 
     const updateLikes = (postKey) => {
         const likesRef = dbRef(database, `${DB_POSTS_KEY}/${postKey}`);
@@ -110,7 +114,7 @@ function LikesDislikesBar({ selectedPost }) {
             justifyContent={"center"}
         >
             <Button
-                disabled={status === "disliked"}
+                disabled={context.loggedInUser == null || status === "disliked"}
                 onClick={handleLike}
                 type="button"
             >
@@ -120,7 +124,7 @@ function LikesDislikesBar({ selectedPost }) {
                 {LikesInNumber - DislikesInNumber}
             </Typography>
             <Button
-                disabled={status === "liked"}
+                disabled={context.loggedInUser == null || status === "liked"}
                 onClick={handleDislike}
                 type="button"
             >
