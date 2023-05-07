@@ -29,7 +29,7 @@ function ViewMoreCenter({ selectedPost }) {
                                 <img
                                     alt=""
                                     src={url}
-                                    height={"200vh"}
+                                    style={{ height: "20vh" }}
                                     loading="lazy"
                                 />
                             </a>
