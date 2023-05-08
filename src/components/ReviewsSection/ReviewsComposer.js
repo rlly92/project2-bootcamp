@@ -138,7 +138,7 @@ function ReviewsComposer({ selectedPost, setMode }) {
             `${DB_POSTS_KEY}/${selectedPost.key}/reviews`
         );
         const newReviewRef = push(reviewListRef);
-        const newReviewKey = newReviewRef.key();
+        const newReviewKey = newReviewRef.key;
 
         const images = await uploadFile(file, selectedPost.key);
         await updateExistingData(selectedPost.key, images);
@@ -217,7 +217,6 @@ function ReviewsComposer({ selectedPost, setMode }) {
                 />
                 <FormGroup>
                     <FormControlLabel
-                        required
                         control={
                             <Switch
                                 name="recommended"

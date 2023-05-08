@@ -9,15 +9,13 @@ import ViewMoreRight from "../components/ViewMore/ViewMoreRight";
 
 function ViewMore() {
     const context = useContext(currentPostContext);
-    console.log(context);
     const postId = useParams().postId;
 
     const selectedPost = context.posts.find((post) => post.key === postId);
-    console.log(selectedPost);
 
     if (context.posts.length !== 0)
         return (
-            <Stack direction={"row"} spacing={2} p={3}>
+            <Stack direction={"row"} spacing={5} p={3}>
                 <ViewMoreLeft selectedPost={selectedPost} />
                 <ViewMoreCenter selectedPost={selectedPost} />
                 <ViewMoreRight selectedPost={selectedPost} />
