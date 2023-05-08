@@ -52,6 +52,11 @@ function CreateProfile() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if (state.displayName !== String(state.displayName).toLowerCase()) {
+            alert("Invalid input. Please input only lowercase letter.");
+            return;
+        }
+
         addUserName(state.displayName).then(() => {
             navigate("/");
         });
