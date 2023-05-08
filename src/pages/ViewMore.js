@@ -17,7 +17,7 @@ function ViewMore() {
 
     if (context.posts.length !== 0)
         return (
-            <Stack direction={"row"} spacing={2} p={3}>
+            <Stack direction={"row"} spacing={5} p={3}>
                 <ViewMoreLeft selectedPost={selectedPost} />
                 <ViewMoreCenter selectedPost={selectedPost} />
                 <ViewMoreRight selectedPost={selectedPost} />

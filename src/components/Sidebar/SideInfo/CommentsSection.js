@@ -56,18 +56,23 @@ function CommentsSection({ selectedPost }) {
             </>
         );
     else if (selectedPost.comments !== 0)
-        commentRender = Object.keys(selectedPost.comments).map((key) => {
-            let comment = selectedPost.comments[key];
-            return (
-                <Paper key={key} sx={{ py: 1, px: 2, my: 1 }}>
-                    <Typography variant="h6">{comment.author}</Typography>
-                    <Typography variant="body1">{comment.text}</Typography>
-                    <Typography variant="overline" sx={{ fontSize: "10px" }}>
-                        {formatDistanceToNow(new Date(comment.date))} ago
-                    </Typography>
-                </Paper>
-            );
-        });
+        commentRender = Object.keys(selectedPost.comments)
+            .reverse()
+            .map((key) => {
+                let comment = selectedPost.comments[key];
+                return (
+                    <Paper key={key} sx={{ py: 1, px: 2, my: 1 }}>
+                        <Typography variant="h6">{comment.author}</Typography>
+                        <Typography variant="body1">{comment.text}</Typography>
+                        <Typography
+                            variant="overline"
+                            sx={{ fontSize: "10px" }}
+                        >
+                            {formatDistanceToNow(new Date(comment.date))} ago
+                        </Typography>
+                    </Paper>
+                );
+            });
 
     return (
         <>
