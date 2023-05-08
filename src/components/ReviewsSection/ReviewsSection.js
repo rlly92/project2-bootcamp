@@ -21,10 +21,6 @@ function ReviewsSection({ selectedPost }) {
         setMode("submit");
     };
 
-    if (selectedPost) {
-        console.log(selectedPost.reviews);
-    }
-
     let reviewsRender;
     if (selectedPost && selectedPost.reviews == null)
         reviewsRender = (

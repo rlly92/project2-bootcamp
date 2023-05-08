@@ -9,6 +9,7 @@ import React, { useState } from "react";
 import ChipsArray from "../Sidebar/SideInfo/ChipsArray";
 import CommentsSection from "../Sidebar/SideInfo/CommentsSection";
 import LightGallery from "lightgallery/react";
+import ChipsSection from "./ViewMoreCenter/ChipsSection";
 
 function ViewMoreCenter({ selectedPost }) {
     let urlArray = Object.values(selectedPost.images);
@@ -18,7 +19,7 @@ function ViewMoreCenter({ selectedPost }) {
             <Typography variant="h5">
                 Here's what to expect of this event: 🍃
             </Typography>
-            <ChipsArray tags={selectedPost.tags} postKey={selectedPost.key} />
+            <ChipsSection tags={selectedPost.tags} postKey={selectedPost.key} />
             <br />
             <Typography variant="h5">Photo gallery 🤳</Typography>
             <Box height={"50vh"} sx={{ overflowY: "scroll" }}>
@@ -43,7 +44,7 @@ function ViewMoreCenter({ selectedPost }) {
             <br />
             <Typography variant="h5">Drop a comment! 💌</Typography>
             <Typography variant="body1">
-                Will you be visting soon? Tell us!
+                Will you be visiting soon? Let the rest of us know!
             </Typography>
             <CommentsSection selectedPost={selectedPost} />
         </Box>

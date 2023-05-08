@@ -9,11 +9,9 @@ import ViewMoreRight from "../components/ViewMore/ViewMoreRight";
 
 function ViewMore() {
     const context = useContext(currentPostContext);
-    console.log(context);
     const postId = useParams().postId;
 
     const selectedPost = context.posts.find((post) => post.key === postId);
-    console.log(selectedPost);
 
     if (context.posts.length !== 0)
         return (
