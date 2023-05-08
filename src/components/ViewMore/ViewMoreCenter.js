@@ -1,4 +1,10 @@
-import { Box, ImageList, ImageListItem, Typography } from "@mui/material";
+import {
+    Box,
+    ImageList,
+    ImageListItem,
+    Paper,
+    Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import ChipsArray from "../Sidebar/SideInfo/ChipsArray";
 import CommentsSection from "../Sidebar/SideInfo/CommentsSection";
@@ -16,7 +22,7 @@ function ViewMoreCenter({ selectedPost }) {
     return (
         <Box flex={3}>
             <Typography variant="h5">
-                Here's what to expect of this event:
+                Here's what to expect of this event: 🍃
             </Typography>
             <ChipsArray tags={selectedPost.tags} />
             <br />
@@ -25,11 +31,14 @@ function ViewMoreCenter({ selectedPost }) {
                 <LightGallery speed={500}>
                     {urlArray.map((url) => {
                         return (
-                            <a href={url}>
+                            <a href={url} key={url}>
                                 <img
                                     alt=""
                                     src={url}
-                                    style={{ height: "20vh" }}
+                                    style={{
+                                        height: "20vh",
+                                        border: "3px solid red",
+                                    }}
                                     loading="lazy"
                                 />
                             </a>
@@ -38,8 +47,10 @@ function ViewMoreCenter({ selectedPost }) {
                 </LightGallery>
             </Box>
             <br />
-            <Typography variant="h5">Drop a comment!</Typography>
-            <Typography variant="body1">Are you visting soon?</Typography>
+            <Typography variant="h5">Drop a comment! 💌</Typography>
+            <Typography variant="body1">
+                Will you be visting soon? Tell us!
+            </Typography>
             <CommentsSection selectedPost={selectedPost} />
         </Box>
     );

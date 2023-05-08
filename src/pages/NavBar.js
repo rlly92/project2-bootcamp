@@ -19,7 +19,7 @@ const NavBar = ({ handleLogOut }) => {
         : "";
 
     const handleLogOutAndNavigate = () => {
-        handleLogOut().then(() => navigate("/login"));
+        handleLogOut();
     };
     const signUpButton = () => {
         navigate("/login/signup");
