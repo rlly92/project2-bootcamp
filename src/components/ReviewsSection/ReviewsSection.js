@@ -21,10 +21,6 @@ function ReviewsSection({ selectedPost }) {
         setMode("submit");
     };
 
-    if (selectedPost) {
-        console.log(selectedPost.reviews);
-    }
-
     let reviewsRender;
     if (selectedPost && selectedPost.reviews == null)
         reviewsRender = (
@@ -35,61 +31,67 @@ function ReviewsSection({ selectedPost }) {
     else
         reviewsRender = (
             <>
-                {Object.values(selectedPost.reviews).map((review) => {
-                    return (
-                        <Paper
-                            key={review.date + review.date + review.title}
-                            sx={{ px: 3, py: 2 }}
-                        >
-                            <Typography variant="h5">{review.title}</Typography>
-                            <Typography variant="subtitle2">
-                                @{review.authorDisplayName}
-                            </Typography>
-                            <Typography variant="overline">
-                                {format(new Date(review.date), "PPP")}
-                            </Typography>
-                            <Typography variant="h6">
-                                {review.recommended === true
-                                    ? "👍 Recommended!"
-                                    : "👎 Not Recommended..."}
-                            </Typography>
+                {Object.values(selectedPost.reviews)
+                    .reverse()
+                    .map((review) => {
+                        return (
                             <Paper
-                                sx={{
-                                    width: "30vw",
-                                    height: "20vh",
-                                    overflowY: "hidden",
-                                    overflowX: "auto",
-                                }}
+                                key={review.date + review.date + review.title}
+                                sx={{ px: 3, py: 2, my: 2 }}
                             >
-                                <Stack direction={"row"} spacing={2}>
-                                    {Object.values(review.images).map((url) => {
-                                        return (
-                                            <a href={url} key={url}>
-                                                <img
-                                                    alt=""
-                                                    src={url}
-                                                    style={{
-                                                        height: "17vh",
-                                                        width: "auto",
-                                                    }}
-                                                />
-                                            </a>
-                                        );
-                                    })}
-                                </Stack>
+                                <Typography variant="h5">
+                                    {review.title}
+                                </Typography>
+                                <Typography variant="subtitle2">
+                                    @{review.authorDisplayName}
+                                </Typography>
+                                <Typography variant="overline">
+                                    {format(new Date(review.date), "PPP")}
+                                </Typography>
+                                <Typography variant="h6">
+                                    {review.recommended === true
+                                        ? "👍 Recommended!"
+                                        : "👎 Not Recommended..."}
+                                </Typography>
+                                <Paper
+                                    sx={{
+                                        width: "30vw",
+                                        height: "20vh",
+                                        overflowY: "hidden",
+                                        overflowX: "auto",
+                                    }}
+                                >
+                                    <Stack direction={"row"} spacing={2}>
+                                        {Object.values(review.images).map(
+                                            (url) => {
+                                                return (
+                                                    <a href={url} key={url}>
+                                                        <img
+                                                            alt=""
+                                                            src={url}
+                                                            style={{
+                                                                height: "17vh",
+                                                                width: "auto",
+                                                            }}
+                                                        />
+                                                    </a>
+                                                );
+                                            }
+                                        )}
+                                    </Stack>
+                                </Paper>
+                                <br />
+                                <Typography variant="body1">
+                                    {review.text}
+                                </Typography>
+                                <br />
+                                <ReviewLikesButton
+                                    postKey={selectedPost.key}
+                                    review={review}
+                                />
                             </Paper>
-                            <br />
-                            <Typography variant="body1">
-                                {review.text}
-                            </Typography>
-                            <br />
-                            <ReviewLikesButton
-                                postKey={selectedPost.key}
-                                review={review}
-                            />
-                        </Paper>
-                    );
-                })}
+                        );
+                    })}
                 <Typography variant="overline">End of reviews list.</Typography>
             </>
         );

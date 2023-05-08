@@ -72,6 +72,7 @@ const App = () => {
                 draggable
                 pauseOnHover={false}
                 theme="dark"
+                style={{ width: "500px" }}
             />
             <UserContext.Provider value={context}>
                 <CurrentPostProvider>
