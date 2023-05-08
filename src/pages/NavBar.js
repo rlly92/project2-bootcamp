@@ -18,8 +18,8 @@ const NavBar = ({ handleLogOut }) => {
         ? context.loggedInUser.displayName
         : "";
 
-    const handleLogOutAndNavigate = () => {
-        handleLogOut().then(() => navigate("/login"));
+    const handleLogOutAndNavigateToLogin = () => {
+        handleLogOut();
     };
     const signUpButton = () => {
         navigate("/login/signup");
@@ -69,7 +69,7 @@ const NavBar = ({ handleLogOut }) => {
                             <Button
                                 variant="contained"
                                 // sx={{ width: "50%", m: 1 }}
-                                onClick={handleLogOutAndNavigate}
+                                onClick={handleLogOutAndNavigateToLogin}
                                 type="button"
                             >
                                 Log Out
