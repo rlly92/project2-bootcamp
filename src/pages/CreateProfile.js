@@ -1,9 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
-import { getAuth, updateProfile } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
 
-import { ref as dbRef, push } from "firebase/database";
+import {
+    ref as dbRef,
+    push,
+    query,
+    orderByChild,
+    equalTo,
+    get,
+} from "firebase/database";
 import { database } from "../firebase";
 
 const DB_USERINFO_KEY = "user_info";
@@ -14,11 +21,11 @@ function CreateProfile() {
     const context = useContext(UserContext);
     const userInfoRef = dbRef(database, DB_USERINFO_KEY);
 
-    //   useEffect(() => {
-    //       if (context.loggedInUser != null) {
-    //           navigate("/");
-    //       }
-    //   }, [context.loggedInUser]);
+    useEffect(() => {
+        if (context.loggedInUser == null) {
+            navigate("/");
+        }
+    }, [context.loggedInUser]);
 
     const addUserName = (displayName) => {
         return updateProfile(context.loggedInUser, {
@@ -49,14 +56,30 @@ function CreateProfile() {
             });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const checkUsernameExists = async (username) => {
+        const snapshot = await query(
+            dbRef(database, DB_USERINFO_KEY),
+            orderByChild("displayName"),
+            equalTo(username),
+            get("value")
+        );
+        return snapshot.exists();
+    };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const username = state.displayName;
+        const usernameExists = await checkUsernameExists(username);
+
+        if (usernameExists) {
+            alert(
+                "This username already exists. Please choose another username"
+            );
+        }
         if (state.displayName !== String(state.displayName).toLowerCase()) {
             alert("Invalid input. Please input only lowercase letter.");
             return;
         }
-
         addUserName(state.displayName).then(() => {
             navigate("/");
         });
