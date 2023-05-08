@@ -55,10 +55,10 @@ function Home({ handleLogOut }) {
         }
     }, [displayName]);
 
-    // const { isLoaded } = useJsApiLoader({
-    //     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
-    //     libraries: libraries,
-    // });
+    const { isLoaded } = useJsApiLoader({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
+        libraries: libraries,
+    });
 
     // const coords = useMemo(() => ({ lat: 1.3521, lng: 103.8198 }), []);
     const mapRef = useRef();
@@ -114,11 +114,11 @@ function Home({ handleLogOut }) {
         setShowBazaarForm(false);
     };
 
-    // if (!isLoaded) {
-    //     return <Typography variant="h1">Loading...</Typography>;
-    // }
+    if (!isLoaded) {
+        return <Typography variant="h1">Loading...</Typography>;
+    }
 
-    // if (isLoaded) console.log("Google maps loaded");
+    if (isLoaded) console.log("Google maps loaded");
 
     return (
         <Box
@@ -175,7 +175,7 @@ function Home({ handleLogOut }) {
                 )}
             </SidebarWrapper>
 
-            {/* <GoogleMap
+            <GoogleMap
                 center={coords}
                 zoom={13}
                 mapContainerStyle={{ width: "100%", height: "100%" }}
@@ -196,7 +196,7 @@ function Home({ handleLogOut }) {
                             }}
                         />
                     ))}
-            </GoogleMap> */}
+            </GoogleMap>
         </Box>
     );
 }
