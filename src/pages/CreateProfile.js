@@ -21,17 +21,24 @@ function CreateProfile() {
     //   }, [context.loggedInUser]);
 
     const addUserName = (displayName) => {
-        const auth = getAuth();
-        const user = auth.currentUser;
-        const userInfo = {
-            displayName: state.displayName,
-            email: user.email,
-        };
-
-        return updateProfile(user, {
+        return updateProfile(context.loggedInUser, {
             displayName,
         })
             .then(() => {
+                console.log(displayName);
+            })
+            .then(() => {
+                const displayNameOfUser = context.loggedInUser.displayName;
+                const emailOfUser = context.loggedInUser.email;
+                const timeOfCreation =
+                    context.loggedInUser.metadata.creationTime;
+                const uID = context.loggedInUser.uid;
+                const userInfo = {
+                    displayName: displayNameOfUser,
+                    email: emailOfUser,
+                    timeCreated: timeOfCreation,
+                    uid: uID,
+                };
                 push(userInfoRef, userInfo);
             })
             .then(() => {
@@ -44,6 +51,11 @@ function CreateProfile() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        if (state.displayName !== String(state.displayName).toLowerCase()) {
+            alert("Invalid input. Please input only lowercase letter.");
+            return;
+        }
 
         addUserName(state.displayName).then(() => {
             navigate("/");
