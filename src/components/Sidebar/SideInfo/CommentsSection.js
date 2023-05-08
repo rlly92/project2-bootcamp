@@ -82,10 +82,19 @@ function CommentsSection({ selectedPost }) {
                     onChange={handleChange}
                     fullWidth
                     multiline
+                    disabled={context.loggedInUser == null ? true : false}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
-                                <IconButton type="submit" size="small">
+                                <IconButton
+                                    disabled={
+                                        context.loggedInUser == null
+                                            ? true
+                                            : false
+                                    }
+                                    type="submit"
+                                    size="small"
+                                >
                                     <Send fontSize="small" />
                                 </IconButton>
                             </InputAdornment>

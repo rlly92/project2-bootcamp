@@ -78,8 +78,6 @@ function ReviewLikesButton({ postKey, review }) {
     if (review.likes === 0) LikesInNumber = 0;
     else LikesInNumber = Object.keys(review.likes).length;
 
-    if (context.loggedInUser == null) return <CircularProgress />;
-
     return (
         <Stack
             direction={"row"}

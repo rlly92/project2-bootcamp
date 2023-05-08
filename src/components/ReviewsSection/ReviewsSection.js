@@ -6,13 +6,16 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ReviewsComposer from "./ReviewsComposer";
 import format from "date-fns/format";
 import ReviewLikesButton from "../Shared/ReviewLikesButton";
+import { UserContext } from "../../App";
 
 function ReviewsSection({ selectedPost }) {
     const [mode, setMode] = useState("view");
+
+    const userContext = useContext(UserContext);
 
     const handleNewReview = () => {
         setMode("submit");
@@ -93,7 +96,7 @@ function ReviewsSection({ selectedPost }) {
 
     return (
         <Box>
-            {mode === "view" && (
+            {mode === "view" && userContext.loggedInUser != null && (
                 <Button variant="contained" onClick={handleNewReview}>
                     Submit a review
                 </Button>
