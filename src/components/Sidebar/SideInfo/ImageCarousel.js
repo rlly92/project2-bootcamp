@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Image from "mui-image";
 import Carousel from "react-bootstrap/Carousel";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 function ImageCarousel({ selectedPost }) {
     const navigate = useNavigate();
 
+    if (selectedPost.images == null)
+        return <Typography variant="body1">No images yet. 🥱</Typography>;
     let urlArray = Object.values(selectedPost.images);
+    console.log(urlArray);
     let carouselRender;
     if (urlArray.length > 5)
         carouselRender = urlArray.slice(0, 5).map((url) => {

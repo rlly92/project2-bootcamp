@@ -1,6 +1,21 @@
-import { Button, Paper, Typography } from "@mui/material";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    Paper,
+    Tooltip,
+    Typography,
+} from "@mui/material";
 import format from "date-fns/format";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import LikesDislikesBar from "./LikesDislikesBar";
 import CommentsSection from "./CommentsSection";
 import ImageCarousel from "./ImageCarousel";
@@ -8,13 +23,53 @@ import ChipsArray from "./ChipsArray";
 
 import { currentPostContext } from "../../CurrentPostContext/CurrentPostProvider";
 import { useNavigate } from "react-router-dom";
+import { Delete, Edit, MoreVert } from "@mui/icons-material";
+import { UserContext } from "../../../App";
+import { ref as dbRef, update } from "firebase/database";
+import { database } from "../../../firebase";
+import { toast } from "react-toastify";
 
 function SideInfo({ selectedPost }) {
-    const context = useContext(currentPostContext);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const [openModal, setOpenModal] = useState(false);
+
+    const userContext = useContext(UserContext);
+
     const navigate = useNavigate();
+
+    const closeMenu = () => {
+        setAnchorEl(null);
+    };
+
+    const handleClickDeleteInMenu = () => {
+        setOpenModal(true);
+        setAnchorEl(null);
+    };
+
+    const handleDelete = (postKey) => {
+        const postListRef = dbRef(database, `posts`);
+
+        toast.promise(
+            update(postListRef, {
+                [postKey]: null,
+            }),
+            {
+                pending: "Uploading in progress...",
+                success: "Post deleted!",
+                error: "Error! 🤔",
+            }
+        );
+        console.log("deletion");
+    };
 
     const handleViewMore = () => {
         navigate(`/post/${selectedPost.key}`);
+    };
+
+    const handleMoreOptionsClick = (e) => {
+        setAnchorEl(e.currentTarget);
     };
 
     return (
@@ -26,10 +81,42 @@ function SideInfo({ selectedPost }) {
             }}
         >
             <Button onClick={handleViewMore}>View More</Button>
+            {userContext.loggedInUser &&
+                userContext.loggedInUser.uid === selectedPost.authorUid && (
+                    <Tooltip title="More Options">
+                        <IconButton onClick={handleMoreOptionsClick}>
+                            <MoreVert />
+                        </IconButton>
+                    </Tooltip>
+                )}
+
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={closeMenu}
+                MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                }}
+            >
+                <MenuItem>
+                    <ListItemIcon>
+                        <Edit fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Edit</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={handleClickDeleteInMenu}>
+                    <ListItemIcon>
+                        <Delete fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                </MenuItem>
+            </Menu>
+
             <Typography variant="h4">{selectedPost.eventName}</Typography>
 
             <Typography variant="subtitle2">
-                Posted by {selectedPost.authorDisplayName} on{" "}
+                Posted by @{selectedPost.authorDisplayName} on{" "}
                 {new Date(selectedPost.date).toLocaleString("en-SG")}
             </Typography>
 
@@ -61,6 +148,25 @@ function SideInfo({ selectedPost }) {
 
             <Typography variant="h5">Comments:</Typography>
             <CommentsSection selectedPost={selectedPost} loadLocation="home" />
+
+            <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+                <DialogTitle id="alert-dialog-title">
+                    Confirm delete?
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleDelete(selectedPost.key)}>
+                        Confirm
+                    </Button>
+                    <Button onClick={() => setOpenModal(false)} autoFocus>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Paper>
     );
 }
