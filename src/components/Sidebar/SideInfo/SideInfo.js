@@ -12,10 +12,8 @@ import { useNavigate } from "react-router-dom";
 function SideInfo({ selectedPost }) {
     const context = useContext(currentPostContext);
     const navigate = useNavigate();
-    console.log(context);
 
     const handleViewMore = () => {
-        console.log(context);
         navigate(`/post/${selectedPost.key}`);
     };
 
@@ -62,7 +60,7 @@ function SideInfo({ selectedPost }) {
             <ChipsArray tags={selectedPost.tags} postKey={selectedPost.key} />
 
             <Typography variant="h5">Comments:</Typography>
-            <CommentsSection selectedPost={selectedPost} />
+            <CommentsSection selectedPost={selectedPost} loadLocation="home" />
         </Paper>
     );
 }

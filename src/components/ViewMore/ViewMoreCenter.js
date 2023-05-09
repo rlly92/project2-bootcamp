@@ -1,12 +1,6 @@
-import {
-    Box,
-    ImageList,
-    ImageListItem,
-    Paper,
-    Typography,
-} from "@mui/material";
-import React, { useState } from "react";
-import ChipsArray from "../Sidebar/SideInfo/ChipsArray";
+import { Box, Typography } from "@mui/material";
+import React from "react";
+
 import CommentsSection from "../Sidebar/SideInfo/CommentsSection";
 import LightGallery from "lightgallery/react";
 import ChipsSection from "./ViewMoreCenter/ChipsSection";
@@ -46,7 +40,10 @@ function ViewMoreCenter({ selectedPost }) {
             <Typography variant="body1">
                 Will you be visiting soon? Let the rest of us know!
             </Typography>
-            <CommentsSection selectedPost={selectedPost} />
+            <CommentsSection
+                selectedPost={selectedPost}
+                loadLocation="viewmore"
+            />
         </Box>
     );
 }
