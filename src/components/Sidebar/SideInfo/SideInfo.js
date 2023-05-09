@@ -29,6 +29,8 @@ import { ref as dbRef, update } from "firebase/database";
 import { database } from "../../../firebase";
 import { toast } from "react-toastify";
 
+import isAfter from "date-fns/isAfter";
+
 function SideInfo({ selectedPost }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -81,14 +83,19 @@ function SideInfo({ selectedPost }) {
             }}
         >
             <Button onClick={handleViewMore}>View More</Button>
-            {userContext.loggedInUser &&
-                userContext.loggedInUser.uid === selectedPost.authorUid && (
-                    <Tooltip title="More Options">
-                        <IconButton onClick={handleMoreOptionsClick}>
-                            <MoreVert />
-                        </IconButton>
-                    </Tooltip>
-                )}
+            {((userContext.loggedInUser &&
+                userContext.loggedInUser.uid === selectedPost.authorUid) ||
+                (userContext.loggedInUser &&
+                    isAfter(
+                        new Date(selectedPost.duration.endDate),
+                        Date.now
+                    ))) && (
+                <Tooltip title="More Options">
+                    <IconButton onClick={handleMoreOptionsClick}>
+                        <MoreVert />
+                    </IconButton>
+                </Tooltip>
+            )}
 
             <Menu
                 id="basic-menu"
@@ -99,12 +106,12 @@ function SideInfo({ selectedPost }) {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                <MenuItem>
+                {/* <MenuItem>
                     <ListItemIcon>
                         <Edit fontSize="small" />
                     </ListItemIcon>
                     <ListItemText>Edit</ListItemText>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem onClick={handleClickDeleteInMenu}>
                     <ListItemIcon>
                         <Delete fontSize="small" />
