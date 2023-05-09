@@ -18,7 +18,7 @@ function SearchBar() {
                 value={state.username}
                 id="username"
                 type="username"
-                placeholder="Enter username here to find fellow users"
+                placeholder="Find other users"
                 onChange={handleChange}
             />
         </div>
