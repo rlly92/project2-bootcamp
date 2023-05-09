@@ -8,6 +8,7 @@ import {
     Stack,
     Button,
 } from "@mui/material";
+import SearchBar from "./UserSearchBar";
 import { useNavigate, Outlet } from "react-router-dom";
 
 const NavBar = ({ handleLogOut }) => {
@@ -64,7 +65,9 @@ const NavBar = ({ handleLogOut }) => {
                             BAZAAR IS LOVE. BAZAAR IS LIFE.
                         </Typography>
                     )}
+
                     <Stack direction="row" spacing={2}>
+                        <SearchBar sx={{ width: "100%" }} />
                         {context.loggedInUser != null ? (
                             <Button
                                 variant="contained"
