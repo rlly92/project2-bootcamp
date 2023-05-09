@@ -54,6 +54,7 @@ function ViewMore() {
                 <Button variant="contained" onClick={handleCopy}>
                     Copy to clipboard
                 </Button>
+
                 <Stack direction={"row"} spacing={5} p={3}>
                     <ViewMoreLeft selectedPost={selectedPost} />
                     <ViewMoreCenter selectedPost={selectedPost} />

@@ -4,6 +4,7 @@ import {
     off,
     onChildAdded,
     onChildChanged,
+    onChildRemoved,
 } from "firebase/database";
 
 import { database } from "../../firebase";
@@ -84,6 +85,14 @@ function CurrentPostProvider({ children }) {
                 });
                 return [...copy];
             });
+        });
+
+        onChildRemoved(postsRef, (data) => {
+            // const remainingPosts = posts.filter((post) => post.key !== data.key);
+            setPosts((prevPosts) =>
+                prevPosts.filter((post) => post.key !== data.key)
+            );
+            console.log(posts);
         });
 
         console.log("listeners added");
