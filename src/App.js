@@ -19,6 +19,7 @@ import NavBar from "./pages/NavBar";
 import CurrentPostProvider from "./components/CurrentPostContext/CurrentPostProvider";
 import UserInfoContextProvider from "./components/UserInfoContext/UserInfoProvider";
 import ViewMore from "./pages/ViewMore";
+import ErrorPage from "./pages/ErrorPage";
 
 const DB_USERINFO_KEY = "user_info";
 export const UserContext = createContext();
@@ -115,9 +116,32 @@ const App = () => {
                                         element={<CreateProfile />}
                                     />
 
+                                    <Route path="post">
+                                        <Route
+                                            index
+                                            element={
+                                                <Navigate
+                                                    to="/error"
+                                                    replace={true}
+                                                />
+                                            }
+                                        />
+                                        <Route
+                                            path=":postId"
+                                            element={<ViewMore />}
+                                        />
+                                    </Route>
+
                                     <Route
-                                        path="post/:postId"
-                                        element={<ViewMore />}
+                                        path="error"
+                                        element={<ErrorPage />}
+                                    />
+
+                                    <Route
+                                        path="*"
+                                        element={
+                                            <Navigate to="/error404" replace />
+                                        }
                                     />
                                 </Route>
                             </Routes>
