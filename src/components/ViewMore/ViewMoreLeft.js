@@ -12,7 +12,7 @@ function ViewMoreLeft({ selectedPost }) {
                 <Typography variant="h3">{selectedPost.eventName}</Typography>
             </Stack>
             <Typography variant="subtitle2">
-                Posted by {selectedPost.authorDisplayName} on{" "}
+                Posted by @{selectedPost.authorDisplayName} on{" "}
                 {new Date(selectedPost.date).toLocaleString("en-SG")}
             </Typography>
             <Box>
