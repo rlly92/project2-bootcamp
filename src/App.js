@@ -20,6 +20,7 @@ import CurrentPostProvider from "./components/CurrentPostContext/CurrentPostProv
 import UserInfoContextProvider from "./components/UserInfoContext/UserInfoProvider";
 import ViewMore from "./pages/ViewMore";
 import ErrorPage from "./pages/ErrorPage";
+import UserProfilePage from "./pages/UserProfilePage";
 
 const DB_USERINFO_KEY = "user_info";
 export const UserContext = createContext();
@@ -144,6 +145,10 @@ const App = () => {
                                         }
                                     />
                                 </Route>
+                                <Route
+                                    path="/user/:username"
+                                    element={<UserProfilePage />}
+                                />
                             </Routes>
                         </BrowserRouter>
                     </CurrentPostProvider>

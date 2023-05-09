@@ -5,18 +5,25 @@ import { UserContext } from "../App";
 import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider";
 
 import { ref as dbRef, push } from "firebase/database";
-import { database } from "../firebase";
+import {
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL,
+} from "firebase/storage";
+import { database, storage } from "../firebase";
 
 const DB_USERINFO_KEY = "user_info";
+const STORAGE_USER_PROFILEPIC_KEY = "user_profilepic";
 
 function CreateProfile() {
     const navigate = useNavigate();
-    const [state, setState] = useState({ displayName: "" });
+    const [state, setState] = useState({ displayName: "", profilePic: null });
     const context = useContext(UserContext);
 
     const userInfoData = useContext(UserInfoContext);
 
     const userInfoRef = dbRef(database, DB_USERINFO_KEY);
+    const userProfilePicRef = storageRef(storage, STORAGE_USER_PROFILEPIC_KEY);
 
     useEffect(() => {
         if (context.loggedInUser == null) {
@@ -26,34 +33,45 @@ function CreateProfile() {
 
     console.log(userInfoData);
 
-    const addUserName = (displayName) => {
-        return updateProfile(context.loggedInUser, {
-            displayName,
-        })
-            .then(() => {
-                console.log(displayName);
+    const addUserName = async (displayName) => {
+        try {
+            const uploadTask = await uploadBytes(
+                userProfilePicRef,
+                state.profilePic
+            );
+            const downloadURL = await getDownloadURL(uploadTask.ref);
+            return updateProfile(context.loggedInUser, {
+                displayName,
+                photoURL: downloadURL,
             })
-            .then(() => {
-                const displayNameOfUser = context.loggedInUser.displayName;
-                const emailOfUser = context.loggedInUser.email;
-                const timeOfCreation =
-                    context.loggedInUser.metadata.creationTime;
-                const uID = context.loggedInUser.uid;
-                const userInfo = {
-                    displayName: displayNameOfUser,
-                    email: emailOfUser,
-                    timeCreated: timeOfCreation,
-                    uid: uID,
-                    reputation: 0,
-                };
-                push(userInfoRef, userInfo);
-            })
-            .then(() => {
-                console.log("Profile updated successfully!");
-            })
-            .catch((error) => {
-                console.error("Error updating profile:", error);
-            });
+                .then(() => {
+                    console.log(displayName);
+                })
+                .then(() => {
+                    const displayNameOfUser = context.loggedInUser.displayName;
+                    const emailOfUser = context.loggedInUser.email;
+                    const timeOfCreation =
+                        context.loggedInUser.metadata.creationTime;
+                    const uID = context.loggedInUser.uid;
+                    const userInfo = {
+                        displayName: displayNameOfUser,
+                        email: emailOfUser,
+                        timeCreated: timeOfCreation,
+                        uid: uID,
+                        reputation: 0,
+                        photoURL: downloadURL,
+                    };
+                    push(userInfoRef, userInfo);
+                })
+                .then(() => {
+                    console.log("Profile updated successfully!");
+                })
+                .catch((error) => {
+                    console.error("Error updating profile:", error);
+                });
+        } catch (error) {
+            console.error("Error uploading profile picture:", error);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -81,6 +99,10 @@ function CreateProfile() {
             navigate("/");
         });
     };
+    const handleFileChange = (e) => {
+        setState({ ...state, profilePic: e.target.files[0] });
+        console.log(state);
+    };
 
     const handleChange = (e) => {
         setState({ ...state, [e.target.id]: e.target.value });
@@ -97,8 +119,8 @@ function CreateProfile() {
                     placeholder="enter your username here"
                     onChange={handleChange}
                 ></input>
-
-                <button type="submit">Submit Username</button>
+                <input type="file" onChange={handleFileChange} />
+                <button type="submit">Submit Username and Profile Pic</button>
             </form>
         </div>
     );
