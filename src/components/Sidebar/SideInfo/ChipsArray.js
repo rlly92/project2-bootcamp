@@ -84,6 +84,15 @@ export default function ChipsArray({ tags, postKey }) {
     };
 
     const deleteChip = (postKey, tagKey) => {
+        const postRef = dbRef(database, `${DB_POSTS_KEY}/${postKey}`);
+
+        if (Object.keys(tags).length === 1) {
+            update(postRef, {
+                tags: 0,
+            });
+            return;
+        }
+
         const tagRef = dbRef(database, `${DB_POSTS_KEY}/${postKey}/tags`);
 
         update(tagRef, {

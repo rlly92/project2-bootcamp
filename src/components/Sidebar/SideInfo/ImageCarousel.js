@@ -1,8 +1,11 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Image from "mui-image";
 import Carousel from "react-bootstrap/Carousel";
+import { useNavigate } from "react-router-dom";
 
 function ImageCarousel({ selectedPost }) {
+    const navigate = useNavigate();
+
     let urlArray = Object.values(selectedPost.images);
     console.log(urlArray);
     let carouselRender;
@@ -27,9 +30,21 @@ function ImageCarousel({ selectedPost }) {
             {carouselRender}
             {urlArray.length > 5 && (
                 <Carousel.Item>
-                    <Button sx={{ height: "30vh" }}>
-                        View {urlArray.length - 5} more images
-                    </Button>
+                    <Box
+                        height={"30vh"}
+                        display={"flex"}
+                        alignItems={"center"}
+                        justifyContent={"center"}
+                    >
+                        <Button
+                            onClick={() =>
+                                navigate(`/post/${selectedPost.key}`)
+                            }
+                        >
+                            View {urlArray.length - 5} more{" "}
+                            {urlArray.length - 5 === 1 ? "image" : "images"}
+                        </Button>
+                    </Box>
                 </Carousel.Item>
             )}
         </Carousel>

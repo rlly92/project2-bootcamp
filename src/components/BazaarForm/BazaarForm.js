@@ -87,6 +87,7 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
             newObj[crypto.randomUUID()] = {
                 authorUid: context.loggedInUser.uid,
                 text: item,
+                likes: 0,
             };
         });
         return newObj;
