@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
-import { getAuth, updateProfile } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
+import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider";
 
 import { ref as dbRef, push } from "firebase/database";
 import { database } from "../firebase";
@@ -12,13 +13,18 @@ function CreateProfile() {
     const navigate = useNavigate();
     const [state, setState] = useState({ displayName: "" });
     const context = useContext(UserContext);
+
+    const userInfoData = useContext(UserInfoContext);
+
     const userInfoRef = dbRef(database, DB_USERINFO_KEY);
 
-    //   useEffect(() => {
-    //       if (context.loggedInUser != null) {
-    //           navigate("/");
-    //       }
-    //   }, [context.loggedInUser]);
+    useEffect(() => {
+        if (context.loggedInUser == null) {
+            navigate("/");
+        }
+    }, [context.loggedInUser]);
+
+    console.log(userInfoData);
 
     const addUserName = (displayName) => {
         return updateProfile(context.loggedInUser, {
@@ -38,6 +44,7 @@ function CreateProfile() {
                     email: emailOfUser,
                     timeCreated: timeOfCreation,
                     uid: uID,
+                    reputation: 0,
                 };
                 push(userInfoRef, userInfo);
             })
@@ -49,11 +56,27 @@ function CreateProfile() {
             });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (state.displayName !== String(state.displayName).toLowerCase()) {
-            alert("Invalid input. Please input only lowercase letter.");
+        const userObject = userInfoData.userInfo.find(
+            (user) => user.displayName === state.displayName
+        );
+
+        if (userObject != null) {
+            alert(
+                "This username already exists. Please choose another username"
+            );
+            return;
+        }
+        // if (state.displayName !== String(state.displayName).toLowerCase()) {
+        //     alert("Invalid input. Please input only lowercase letter.");
+        //     return;
+        // }
+        if (!/^[a-z0-9]+$/.test(state.displayName)) {
+            alert(
+                "Invalid input. Please input only lowercase letters and numbers. No symbols or spaces allowed"
+            );
             return;
         }
 

@@ -17,6 +17,7 @@ import SignUpPage from "./pages/SignUpPage";
 import CreateProfile from "./pages/CreateProfile";
 import NavBar from "./pages/NavBar";
 import CurrentPostProvider from "./components/CurrentPostContext/CurrentPostProvider";
+import UserInfoContextProvider from "./components/UserInfoContext/UserInfoProvider";
 import ViewMore from "./pages/ViewMore";
 import ErrorPage from "./pages/ErrorPage";
 
@@ -76,65 +77,77 @@ const App = () => {
                 style={{ width: "500px" }}
             />
             <UserContext.Provider value={context}>
-                <CurrentPostProvider>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route
-                                path="/"
-                                element={<NavBar handleLogOut={handleLogOut} />}
-                            >
+                <UserInfoContextProvider>
+                    <CurrentPostProvider>
+                        <BrowserRouter>
+                            <Routes>
                                 <Route
-                                    index
+                                    path="/"
                                     element={
-                                        <RequireAuth
-                                            redirectTo="login"
-                                            user={loggedInUser}
-                                        >
-                                            <Home handleLogOut={handleLogOut} />
-                                        </RequireAuth>
+                                        <NavBar handleLogOut={handleLogOut} />
                                     }
-                                />
-
-                                <Route path="login" element={<LoginPage />} />
-
-                                <Route
-                                    path="/login/signup"
-                                    element={<SignUpPage />}
-                                />
-
-                                <Route
-                                    path="createprofile"
-                                    element={<CreateProfile />}
-                                />
-
-                                <Route path="post">
+                                >
                                     <Route
                                         index
                                         element={
-                                            <Navigate
-                                                to="/error"
-                                                replace={true}
-                                            />
+                                            <RequireAuth
+                                                redirectTo="login"
+                                                user={loggedInUser}
+                                            >
+                                                <Home
+                                                    handleLogOut={handleLogOut}
+                                                />
+                                            </RequireAuth>
                                         }
                                     />
+
                                     <Route
-                                        path=":postId"
-                                        element={<ViewMore />}
+                                        path="login"
+                                        element={<LoginPage />}
+                                    />
+
+                                    <Route
+                                        path="/login/signup"
+                                        element={<SignUpPage />}
+                                    />
+
+                                    <Route
+                                        path="createprofile"
+                                        element={<CreateProfile />}
+                                    />
+
+                                    <Route path="post">
+                                        <Route
+                                            index
+                                            element={
+                                                <Navigate
+                                                    to="/error"
+                                                    replace={true}
+                                                />
+                                            }
+                                        />
+                                        <Route
+                                            path=":postId"
+                                            element={<ViewMore />}
+                                        />
+                                    </Route>
+
+                                    <Route
+                                        path="error"
+                                        element={<ErrorPage />}
+                                    />
+
+                                    <Route
+                                        path="*"
+                                        element={
+                                            <Navigate to="/error404" replace />
+                                        }
                                     />
                                 </Route>
-
-                                <Route path="error" element={<ErrorPage />} />
-
-                                <Route
-                                    path="*"
-                                    element={
-                                        <Navigate to="/error404" replace />
-                                    }
-                                />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
-                </CurrentPostProvider>
+                            </Routes>
+                        </BrowserRouter>
+                    </CurrentPostProvider>
+                </UserInfoContextProvider>
             </UserContext.Provider>
         </div>
     );
