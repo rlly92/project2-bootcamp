@@ -49,33 +49,25 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
 
         let images = {};
 
-        await Promise.all(
-            files.map(async (image, index) => {
-                const imageRef = sRef(
-                    storage,
-                    `${STORAGE_IMAGES_KEY}/${postKey}/${image.name}`
-                );
-                await uploadBytesResumable(imageRef, image);
-                let imageURL = await getDownloadURL(imageRef);
-                images[crypto.randomUUID()] = imageURL;
-                console.log(images);
-
-                toast.success(
-                    `Successfully uploaded image! (${index + 1}/${
-                        files.length
-                    })`,
-                    {
-                        position: "top-center",
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "dark",
-                    }
-                );
-            })
+        await toast.promise(
+            Promise.all(
+                files.map(async (image, index) => {
+                    const imageRef = sRef(
+                        storage,
+                        `${STORAGE_IMAGES_KEY}/${postKey}/${
+                            crypto.randomUUID() + image.name
+                        }`
+                    );
+                    await uploadBytesResumable(imageRef, image);
+                    let imageURL = await getDownloadURL(imageRef);
+                    images[crypto.randomUUID()] = imageURL;
+                })
+            ),
+            {
+                pending: `Uploading photos 🤩`,
+                success: "Successfully uploaded photos! 👌",
+                error: "An error occurred... 🤯",
+            }
         );
         console.log(images);
         return images;
