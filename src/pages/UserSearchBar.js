@@ -48,7 +48,7 @@ function SearchBar() {
                         <Box component="li" {...props} key={option.displayName}>
                             {/* <a href={`/post/-NUmPvLNNB6qql9Zepw1`}> */}
                             <a
-                                href="#"
+                                href=""
                                 onClick={() =>
                                     handleUserSelection(option.displayName)
                                 }
