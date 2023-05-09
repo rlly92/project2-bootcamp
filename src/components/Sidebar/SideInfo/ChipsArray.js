@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { styled } from "@mui/material/styles";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
-import TagFacesIcon from "@mui/icons-material/TagFaces";
 
 import { ref as dbRef, update } from "firebase/database";
 import { database } from "../../../firebase";
 import { UserContext } from "../../../App";
-import { currentPostContext } from "../../CurrentPostContext/CurrentPostProvider";
-import { CircularProgress, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { toast } from "react-toastify";
-import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
 
 const DB_POSTS_KEY = "posts";
 

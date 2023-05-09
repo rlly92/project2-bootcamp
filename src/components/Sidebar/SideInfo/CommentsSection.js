@@ -2,22 +2,25 @@ import {
     Button,
     IconButton,
     InputAdornment,
-    Paper,
     TextField,
     Typography,
 } from "@mui/material";
-import { ref as dbRef, push, set, update } from "firebase/database";
+import { ref as dbRef, push, set } from "firebase/database";
 import { database } from "../../../firebase";
 import React, { useContext, useState } from "react";
 
 import { UserContext } from "../../../App";
-import formatDistanceToNow from "date-fns/formatDistanceToNow";
+
 import { Send } from "@mui/icons-material";
+
+import CommentBubble from "../../CommentsSection/CommentBubble";
+import { useNavigate } from "react-router-dom";
 
 const DB_POSTS_KEY = "posts";
 
-function CommentsSection({ selectedPost }) {
+function CommentsSection({ selectedPost, loadLocation }) {
     const [commentInput, setCommentInput] = useState("");
+    const navigate = useNavigate();
 
     const context = useContext(UserContext);
 
@@ -55,29 +58,91 @@ function CommentsSection({ selectedPost }) {
                 <Typography variant="body1">It's empty here.</Typography>
             </>
         );
-    else if (selectedPost.comments !== 0)
+    else if (selectedPost.comments !== 0 && loadLocation === "viewmore")
         commentRender = Object.keys(selectedPost.comments)
             .reverse()
             .map((key) => {
                 let comment = selectedPost.comments[key];
                 return (
-                    <Paper key={key} sx={{ py: 1, px: 2, my: 1 }}>
-                        <Typography variant="h6">{comment.author}</Typography>
-                        <Typography variant="body1">{comment.text}</Typography>
-                        <Typography
-                            variant="overline"
-                            sx={{ fontSize: "10px" }}
-                        >
-                            {formatDistanceToNow(new Date(comment.date))} ago
-                        </Typography>
-                    </Paper>
+                    <CommentBubble
+                        key={key}
+                        author={comment.author}
+                        authorUid={comment.authorUid}
+                        text={comment.text}
+                        date={comment.date}
+                        loggedInUser={context.loggedInUser}
+                        postKey={selectedPost.key}
+                        commentKey={key}
+                    />
                 );
             });
+    else if (
+        selectedPost.comments !== 0 &&
+        loadLocation === "home" &&
+        Object.keys(selectedPost.comments).length > 5
+    )
+        commentRender = (
+            <>
+                <Typography variant="overline">
+                    Showing 5 latest posts
+                </Typography>
+                {Object.keys(selectedPost.comments)
+                    .reverse()
+                    .slice(0, 5)
+                    .map((key) => {
+                        let comment = selectedPost.comments[key];
+                        return (
+                            <CommentBubble
+                                key={key}
+                                author={comment.author}
+                                authorUid={comment.authorUid}
+                                text={comment.text}
+                                date={comment.date}
+                                loggedInUser={context.loggedInUser}
+                                postKey={selectedPost.key}
+                                commentKey={key}
+                            />
+                        );
+                    })}
+                <Button onClick={() => navigate(`/post/${selectedPost.key}`)}>
+                    View {Object.keys(selectedPost.comments).length - 5} more
+                    comments
+                </Button>
+            </>
+        );
+    else if (
+        selectedPost.comments !== 0 &&
+        loadLocation === "home" &&
+        Object.keys(selectedPost.comments).length <= 5
+    )
+        commentRender = (
+            <>
+                {Object.keys(selectedPost.comments)
+                    .reverse()
+                    .slice(0, 5)
+                    .map((key) => {
+                        let comment = selectedPost.comments[key];
+                        return (
+                            <CommentBubble
+                                key={key}
+                                author={comment.author}
+                                authorUid={comment.authorUid}
+                                text={comment.text}
+                                date={comment.date}
+                                loggedInUser={context.loggedInUser}
+                                postKey={selectedPost.key}
+                                commentKey={key}
+                            />
+                        );
+                    })}
+            </>
+        );
 
     return (
         <>
             <form onSubmit={handleSubmit}>
                 <TextField
+                    required
                     sx={{ my: 2 }}
                     name="commentInput"
                     placeholder="Share your thoughts"
@@ -108,6 +173,9 @@ function CommentsSection({ selectedPost }) {
                 />
             </form>
             {commentRender}
+            {loadLocation === "viewmore" && (
+                <Typography variant="overline">End of comments list</Typography>
+            )}
         </>
     );
 }

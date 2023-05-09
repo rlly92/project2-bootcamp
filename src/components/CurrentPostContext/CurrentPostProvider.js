@@ -40,9 +40,10 @@ function CurrentPostProvider({ children }) {
                     reviews: data.val().reviews,
                     type: data.val().type,
                     tags: data.val().tags,
-                    comments: data.val().comments,
+                    comments:
+                        data.val().comments == null ? 0 : data.val().comments,
                     authorDisplayName: data.val().authorDisplayName,
-                    authorUid: data.val().uid,
+                    authorUid: data.val().authorUid,
                     date: data.val().date,
                 },
             ]);
@@ -75,9 +76,10 @@ function CurrentPostProvider({ children }) {
                     reviews: data.val().reviews,
                     type: data.val().type,
                     tags: data.val().tags,
-                    comments: data.val().comments,
+                    comments:
+                        data.val().comments == null ? 0 : data.val().comments,
                     authorDisplayName: data.val().authorDisplayName,
-                    authorUid: data.val().uid,
+                    authorUid: data.val().authorUid,
                     date: data.val().date,
                 });
                 return [...copy];
