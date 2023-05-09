@@ -42,7 +42,7 @@ function CurrentPostProvider({ children }) {
                     tags: data.val().tags,
                     comments: data.val().comments,
                     authorDisplayName: data.val().authorDisplayName,
-                    authorUid: data.val().uid,
+                    authorUid: data.val().authorUid,
                     date: data.val().date,
                 },
             ]);
