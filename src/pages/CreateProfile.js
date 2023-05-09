@@ -69,8 +69,14 @@ function CreateProfile() {
             );
             return;
         }
-        if (state.displayName !== String(state.displayName).toLowerCase()) {
-            alert("Invalid input. Please input only lowercase letter.");
+        // if (state.displayName !== String(state.displayName).toLowerCase()) {
+        //     alert("Invalid input. Please input only lowercase letter.");
+        //     return;
+        // }
+        if (!/^[a-z0-9]+$/.test(state.displayName)) {
+            alert(
+                "Invalid input. Please input only lowercase letters and numbers. No symbols or spaces allowed"
+            );
             return;
         }
 
