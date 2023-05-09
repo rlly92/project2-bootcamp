@@ -2,15 +2,9 @@ import React, { useState, useEffect, useContext } from "react";
 import { updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
+import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider";
 
-import {
-    ref as dbRef,
-    push,
-    query,
-    orderByChild,
-    equalTo,
-    get,
-} from "firebase/database";
+import { ref as dbRef, push } from "firebase/database";
 import { database } from "../firebase";
 
 const DB_USERINFO_KEY = "user_info";
@@ -19,6 +13,9 @@ function CreateProfile() {
     const navigate = useNavigate();
     const [state, setState] = useState({ displayName: "" });
     const context = useContext(UserContext);
+
+    const userInfoData = useContext(UserInfoContext);
+
     const userInfoRef = dbRef(database, DB_USERINFO_KEY);
 
     useEffect(() => {
@@ -26,6 +23,8 @@ function CreateProfile() {
             navigate("/");
         }
     }, [context.loggedInUser]);
+
+    console.log(userInfoData);
 
     const addUserName = (displayName) => {
         return updateProfile(context.loggedInUser, {
@@ -45,6 +44,7 @@ function CreateProfile() {
                     email: emailOfUser,
                     timeCreated: timeOfCreation,
                     uid: uID,
+                    reputation: 0,
                 };
                 push(userInfoRef, userInfo);
             })
@@ -56,30 +56,24 @@ function CreateProfile() {
             });
     };
 
-    const checkUsernameExists = async (username) => {
-        const snapshot = await query(
-            dbRef(database, DB_USERINFO_KEY),
-            orderByChild("displayName"),
-            equalTo(username),
-            get("value")
-        );
-        return snapshot.exists();
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const username = state.displayName;
-        const usernameExists = await checkUsernameExists(username);
 
-        if (usernameExists) {
+        const userObject = userInfoData.userInfo.find(
+            (user) => user.displayName === state.displayName
+        );
+
+        if (userObject != null) {
             alert(
                 "This username already exists. Please choose another username"
             );
+            return;
         }
         if (state.displayName !== String(state.displayName).toLowerCase()) {
             alert("Invalid input. Please input only lowercase letter.");
             return;
         }
+
         addUserName(state.displayName).then(() => {
             navigate("/");
         });
