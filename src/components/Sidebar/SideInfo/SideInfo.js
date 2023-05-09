@@ -59,7 +59,7 @@ function SideInfo({ selectedPost }) {
             <Typography variant="body2">Type: {selectedPost.type}</Typography>
 
             <Typography>Tags:</Typography>
-            <ChipsArray tags={selectedPost.tags} />
+            <ChipsArray tags={selectedPost.tags} postKey={selectedPost.key} />
 
             <Typography variant="h5">Comments:</Typography>
             <CommentsSection selectedPost={selectedPost} />

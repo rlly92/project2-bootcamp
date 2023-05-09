@@ -1,7 +1,7 @@
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import React, { useContext } from "react";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { currentPostContext } from "../components/CurrentPostContext/CurrentPostProvider";
 import ViewMoreLeft from "../components/ViewMore/ViewMoreLeft";
 import ViewMoreCenter from "../components/ViewMore/ViewMoreCenter";
@@ -11,7 +11,10 @@ function ViewMore() {
     const context = useContext(currentPostContext);
     const postId = useParams().postId;
 
+    const navigate = useNavigate();
+
     const selectedPost = context.posts.find((post) => post.key === postId);
+    if (selectedPost == null) navigate("/error", { replace: true });
 
     if (context.posts.length !== 0)
         return (
