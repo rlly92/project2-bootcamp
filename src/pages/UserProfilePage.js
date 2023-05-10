@@ -23,7 +23,11 @@ function UserProfilePage(props) {
         <div>
             <h1>Welcome to {username} 's page! Browse wisely.</h1>
             <img
-                src={context.loggedInUser.photoURL}
+                src={
+                    context.loggedInUser != null
+                        ? context.loggedInUser.photoURL
+                        : ""
+                }
                 alt="Profile Picture"
                 style={{ width: "300px", height: "300px" }}
             />
