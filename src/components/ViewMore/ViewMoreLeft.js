@@ -4,6 +4,7 @@ import LikesDislikesBar from "../Sidebar/SideInfo/LikesDislikesBar";
 import format from "date-fns/format";
 import { Stack } from "react-bootstrap";
 import { OpenInNew } from "@mui/icons-material";
+import Image from "mui-image";
 
 function ViewMoreLeft({ selectedPost }) {
     return (
@@ -53,7 +54,13 @@ function ViewMoreLeft({ selectedPost }) {
             </Typography>
             <br />
             <Typography variant="h5">📍 {selectedPost.geocodeName}</Typography>
-            <Box bgcolor={"#12f2fe"} width={"350px"} height={"350px"} />
+            <Image
+                src={`https://maps.googleapis.com/maps/api/staticmap?center=${selectedPost.coords.lat},${selectedPost.coords.lng}&zoom=15&size=350x350&markers=${selectedPost.coords.lat},${selectedPost.coords.lng}&key=${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`}
+                showLoading
+                width={"350px"}
+                height={"350px"}
+                duration={1000}
+            />
         </Box>
     );
 }
