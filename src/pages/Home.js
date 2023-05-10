@@ -20,6 +20,7 @@ import SidebarWrapper from "../components/Sidebar/SidebarWrapper";
 import { libraries } from "../googleUtils";
 
 import greenMarker from "../assets/images/permMarkerResized.png";
+import blackMarker from "../assets/images/blackMarkerSmall.png";
 import { UserContext } from "../App";
 import { currentPostContext } from "../components/CurrentPostContext/CurrentPostProvider";
 
