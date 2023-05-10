@@ -1,17 +1,11 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { updateProfile } from "firebase/auth";
 
 import { ref as dbRef, push } from "firebase/database";
 import { UserContext } from "../App";
 import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider";
-import {
-    ref as storageRef,
-    uploadBytes,
-    getDownloadURL,
-} from "firebase/storage";
+import { ref as storageRef } from "firebase/storage";
 import { database, storage } from "../firebase";
-import { render } from "react-dom";
 
 const DB_USERINFO_KEY = "user_info";
 const STORAGE_USER_PROFILEPIC_KEY = "user_profilepic";
@@ -31,6 +25,12 @@ function UserProfilePage(props) {
     console.log(userInfoData.userInfo);
 
     const { username } = useParams();
+
+    useEffect(() => {
+        if (context.loggedInUser == null) {
+            navigate("/");
+        }
+    }, [context.loggedInUser]);
 
     // use username to filter through the userInfoData and find and then store
     // the current user's data in currentUserData so that it can be rendered
