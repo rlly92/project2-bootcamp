@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import SearchIcon from "@mui/icons-material/Search";
 import Input from "@mui/material/Input";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -12,6 +12,7 @@ import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider"
 function SearchBar() {
     const [state, setState] = useState([{ username: "" }]);
     const [results, setResults] = useState([]);
+    const navigate = useNavigate();
 
     // current user context:
     // const context = useContext(UserContext);
@@ -26,17 +27,13 @@ function SearchBar() {
     //     console.log(state);
     // };
 
+    function handleUserSelection(username) {
+        // Navigate to the page that conditionally renders user data based on the selected username
+
+        navigate(`/user/${username}`);
+    }
     return (
         <div>
-            {/* <SearchIcon />
-            <Input
-                value={state.username}
-                id="username"
-                type="username"
-                placeholder="Find other users"
-                onChange={handleChange}
-            /> */}
-
             <Stack sx={{ width: 300, margin: "auto" }}>
                 <Autocomplete
                     id="displayName"
@@ -48,7 +45,14 @@ function SearchBar() {
                     }
                     noOptionsText={"NO USERS CAN BE FOUND"}
                     renderOption={(props, option) => (
-                        <Box component="li" {...props} key={option.displayName}>
+                        <Box
+                            component="li"
+                            {...props}
+                            key={option.displayName}
+                            onClick={() =>
+                                handleUserSelection(option.displayName)
+                            }
+                        >
                             {option.displayName}
                         </Box>
                     )}
