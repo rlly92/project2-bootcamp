@@ -72,9 +72,9 @@ const NavBar = ({ handleLogOut }) => {
                     )}
 
                     <Stack direction="row" spacing={2}>
-                        <SearchBar sx={{ width: "100%" }} />
                         {context.loggedInUser != null ? (
                             <Stack direction="row" spacing={2}>
+                                <SearchBar sx={{ width: "100%" }} />
                                 <Button
                                     variant="contained"
                                     onClick={handleProfileClick}
