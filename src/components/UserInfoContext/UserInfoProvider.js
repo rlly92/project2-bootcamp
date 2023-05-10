@@ -23,6 +23,7 @@ function UserInfoContextProvider({ children }) {
                     timeCreated: data.val().timeCreated,
                     uid: data.val().uid,
                     reputation: data.val().reputation,
+                    photoURL: data.val().photoURL,
                 },
             ]);
         });

@@ -23,7 +23,6 @@ function CreateProfile() {
     const userInfoData = useContext(UserInfoContext);
 
     const userInfoRef = dbRef(database, DB_USERINFO_KEY);
-    const userProfilePicRef = storageRef(storage, STORAGE_USER_PROFILEPIC_KEY);
 
     useEffect(() => {
         if (context.loggedInUser == null) {
@@ -35,6 +34,13 @@ function CreateProfile() {
 
     const addUserName = async (displayName) => {
         try {
+            const userProfilePicRef = storageRef(
+                storage,
+                `${STORAGE_USER_PROFILEPIC_KEY}/${
+                    crypto.randomUUID() + state.profilePic.name
+                }`
+            );
+
             const uploadTask = await uploadBytes(
                 userProfilePicRef,
                 state.profilePic
@@ -46,6 +52,7 @@ function CreateProfile() {
             })
                 .then(() => {
                     console.log(displayName);
+                    console.log(context.loggedInUser.photoURL);
                 })
                 .then(() => {
                     const displayNameOfUser = context.loggedInUser.displayName;
@@ -53,13 +60,14 @@ function CreateProfile() {
                     const timeOfCreation =
                         context.loggedInUser.metadata.creationTime;
                     const uID = context.loggedInUser.uid;
+                    const profilePicURL = context.loggedInUser.photoURL;
                     const userInfo = {
                         displayName: displayNameOfUser,
                         email: emailOfUser,
                         timeCreated: timeOfCreation,
                         uid: uID,
                         reputation: 0,
-                        photoURL: downloadURL,
+                        photoURL: profilePicURL,
                     };
                     push(userInfoRef, userInfo);
                 })
@@ -92,6 +100,11 @@ function CreateProfile() {
             alert(
                 "Invalid input. Please input only lowercase letters and numbers. No symbols or spaces allowed"
             );
+            return;
+        }
+
+        if (state.profilePic == null) {
+            alert("Please upload a profile picture");
             return;
         }
 

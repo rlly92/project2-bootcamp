@@ -1,36 +1,38 @@
-// THIS IS THE PAGE FOR WHEN USER SELECTS ANOTHER USER FROM DROPDOWN USER SEARCH BAR!
+// THIS WAS ORIGINALLY FOR THE PAGE FOR WHEN USER SELECTS ANOTHER USER FROM DROPDOWN USER SEARCH BAR!
 
-import React, { useState, useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+// IT HAS NOW BEEN DEPRECIATED.
 
-import { UserContext } from "../App";
-import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider";
+// import React, { useState, useContext, useEffect } from "react";
+// import { useNavigate, useParams } from "react-router-dom";
 
-function UserProfilePage(props) {
-    // const navigate = useNavigate();
-    const [currentUserData, setCurrentUserData] = useState([]);
+// import { UserContext } from "../App";
+// import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider";
 
-    // // current user context:
-    // const context = useContext(UserContext);
+// function UserProfilePage(props) {
+//     // const navigate = useNavigate();
+//     const [currentUserData, setCurrentUserData] = useState([]);
 
-    // context for database of users and the data of each user within that database:
-    const userInfoData = useContext(UserInfoContext);
+//     // // current user context:
+//     // const context = useContext(UserContext);
 
-    const { username } = useParams();
+//     // context for database of users and the data of each user within that database:
+//     const userInfoData = useContext(UserInfoContext);
 
-    // use username to filter through the userInfoData and find and then store
-    // the current user's data in currentUserData so that it can be rendered
+//     const { username } = useParams();
 
-    return (
-        <div>
-            <h1>Welcome to {username} 's page! Browse wisely.</h1>
-            {/* <img
-                src={something something .photoURL}
-                alt="Profile Picture"
-                style={{ width: "300px", height: "300px" }}
-            /> */}
-        </div>
-    );
-}
+//     // use username to filter through the userInfoData and find and then store
+//     // the current user's data in currentUserData so that it can be rendered
 
-export default UserProfilePage;
+//     return (
+//         <div>
+//             <h1>Welcome to {username} 's page! Browse wisely.</h1>
+//             {/* <img
+//                 src={something something .photoURL}
+//                 alt="Profile Picture"
+//                 style={{ width: "300px", height: "300px" }}
+//             /> */}
+//         </div>
+//     );
+// }
+
+// export default UserProfilePage;

@@ -21,7 +21,7 @@ import UserInfoContextProvider from "./components/UserInfoContext/UserInfoProvid
 import ViewMore from "./pages/ViewMore";
 import ErrorPage from "./pages/ErrorPage";
 import UserProfilePage from "./pages/UserProfilePage";
-import SearchUserProfilePage from "./pages/SearchUserProfilePage";
+// import SearchUserProfilePage from "./pages/SearchUserProfilePage";
 
 const DB_USERINFO_KEY = "user_info";
 export const UserContext = createContext();
@@ -133,6 +133,10 @@ const App = () => {
                                             element={<ViewMore />}
                                         />
                                     </Route>
+                                    <Route
+                                        path="user/:username"
+                                        element={<UserProfilePage />}
+                                    />
 
                                     <Route
                                         path="error"
@@ -146,14 +150,6 @@ const App = () => {
                                         }
                                     />
                                 </Route>
-                                <Route
-                                    path="/user/currentloggedinuser"
-                                    element={<UserProfilePage />}
-                                />
-                                <Route
-                                    path="/user/:username"
-                                    element={<SearchUserProfilePage />}
-                                />
                             </Routes>
                         </BrowserRouter>
                     </CurrentPostProvider>
