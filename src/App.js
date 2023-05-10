@@ -133,6 +133,10 @@ const App = () => {
                                             element={<ViewMore />}
                                         />
                                     </Route>
+                                    <Route
+                                        path="user/:username"
+                                        element={<UserProfilePage />}
+                                    />
 
                                     <Route
                                         path="error"
@@ -146,14 +150,6 @@ const App = () => {
                                         }
                                     />
                                 </Route>
-                                <Route
-                                    path="/user/:username"
-                                    element={<UserProfilePage />}
-                                />
-                                {/* <Route
-                                    path="/user/:username"
-                                    element={<SearchUserProfilePage />}
-                                /> */}
                             </Routes>
                         </BrowserRouter>
                     </CurrentPostProvider>

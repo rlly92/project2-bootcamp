@@ -28,6 +28,7 @@ function UserProfilePage(props) {
 
     // context for database of users and the data of each user within that database:
     const userInfoData = useContext(UserInfoContext);
+    console.log(userInfoData.userInfo);
 
     const { username } = useParams();
 
@@ -35,13 +36,24 @@ function UserProfilePage(props) {
     // the current user's data in currentUserData so that it can be rendered
 
     const profilePic = () => {
-        const currentUser = userInfoData.find(
+        const currentUser = userInfoData.userInfo.find(
             (user) => user.displayName === username
         );
-        if (currentUser && currentUser.photoURL) {
-            return <img src={currentUser.photoURL} alt="Profile pic" />;
+
+        console.log(currentUser);
+
+        if (currentUser == null) {
+            return <h1>still loading...</h1>;
+        } else if (currentUser && currentUser.photoURL) {
+            return (
+                <img
+                    style={{ height: "300px", width: "300px" }}
+                    src={currentUser.photoURL}
+                    alt="Profile pic"
+                />
+            );
         } else {
-            return <div>No profile pic found</div>;
+            return <h1>No profile pic found</h1>;
         }
     };
 
@@ -51,7 +63,7 @@ function UserProfilePage(props) {
     return (
         <div>
             <h1>Welcome to {username} 's page! Browse wisely.</h1>
-            {profilePic}
+            {profilePic()}
         </div>
     );
 }
