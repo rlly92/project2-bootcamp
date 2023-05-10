@@ -7,6 +7,8 @@ import {
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
+import { Button, Stack, TextField, Typography } from "@mui/material";
+import { toast } from "react-toastify";
 
 const SignUpPage = () => {
     const [state, setState] = useState({ emailInput: "", passwordInput: "" });
@@ -28,6 +30,7 @@ const SignUpPage = () => {
             state.passwordInput
         )
             .then(() => {
+                toast.success("🐝 Successfully created a new account!");
                 setState({ emailInput: "", passwordInput: "" });
             })
             .then(() => {
@@ -41,25 +44,49 @@ const SignUpPage = () => {
     };
 
     return (
-        <div>
+        <Stack alignItems={"center"} justifyContent={"center"} my={5}>
+            <Typography variant="h2">Join the band of bazzingers.</Typography>
+            <Typography variant="subtitle1">
+                We welcome you with open arms. *winky face*
+            </Typography>
             <form onSubmit={handleSubmit}>
-                <input
-                    value={state.emailInput}
-                    id="emailInput"
-                    type="email"
-                    placeholder="enter your email here"
-                    onChange={handleChange}
-                ></input>
-                <input
-                    value={state.passwordInput}
-                    id="passwordInput"
-                    type="password"
-                    placeholder="give me your password"
-                    onChange={handleChange}
-                ></input>
-                <button type="submit">Sign Up</button>
+                <Stack
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    spacing={2}
+                    mt={2}
+                >
+                    <TextField
+                        required
+                        autoComplete="off"
+                        value={state.emailInput}
+                        size="small"
+                        id="emailInput"
+                        type="email"
+                        label="Email"
+                        onChange={handleChange}
+                    ></TextField>
+                    <TextField
+                        required
+                        autoComplete="off"
+                        value={state.passwordInput}
+                        size="small"
+                        id="passwordInput"
+                        type="password"
+                        label="Password"
+                        onChange={handleChange}
+                    ></TextField>
+                    <Button type="submit" variant="contained">
+                        Sign Up
+                    </Button>
+                </Stack>
             </form>
-        </div>
+            <br />
+            <br />
+            <Button variant="contained" color="secondary">
+                Back to main
+            </Button>
+        </Stack>
     );
 };
 

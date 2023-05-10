@@ -1,6 +1,7 @@
 .App {
     height: 100vh;
     overflow-x: hidden;
+    background-color: #f3f3f3;
 }
 /* overflow: hidden;
 }

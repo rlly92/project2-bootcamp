@@ -4,6 +4,7 @@ import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 
 const LoginPage = () => {
     const [state, setState] = useState({ emailInput: "", passwordInput: "" });
@@ -41,27 +42,46 @@ const LoginPage = () => {
     };
 
     return (
-        <div>
+        <Stack alignItems={"center"} justifyContent={"center"} my={5}>
+            <Typography variant="h2">Join the band of bazzingers.</Typography>
             <form onSubmit={handleSubmit}>
-                <input
-                    value={state.emailInput}
-                    name="emailInput"
-                    type="email"
-                    placeholder="enter your email here"
-                    onChange={handleChange}
-                ></input>
-                <input
-                    value={state.passwordInput}
-                    name="passwordInput"
-                    type="password"
-                    placeholder="give me your password"
-                    onChange={handleChange}
-                ></input>
-                <button type="submit">Login</button>
-                <br />
-                <Link to="signup">sign up</Link>
+                <Stack
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    spacing={2}
+                    mt={2}
+                >
+                    <TextField
+                        required
+                        size="small"
+                        label="Email"
+                        value={state.emailInput}
+                        name="emailInput"
+                        type="email"
+                        onChange={handleChange}
+                    ></TextField>
+                    <TextField
+                        required
+                        size="small"
+                        value={state.passwordInput}
+                        name="passwordInput"
+                        type="password"
+                        label="Password"
+                        onChange={handleChange}
+                    ></TextField>
+                    <Button type="submit" variant="contained">
+                        Login
+                    </Button>
+                    <br />
+                    <Typography variant="h4">
+                        Not part of the community yet?
+                    </Typography>
+                    <Link to="signup">
+                        <Button variant="contained">sign up</Button>
+                    </Link>
+                </Stack>
             </form>
-        </div>
+        </Stack>
     );
 };
 

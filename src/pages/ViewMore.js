@@ -16,6 +16,7 @@ import ViewMoreRight from "../components/ViewMore/ViewMoreRight";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { UserContext } from "../App";
 import { toast } from "react-toastify";
+import { ContentCopy } from "@mui/icons-material";
 
 function ViewMore() {
     const context = useContext(currentPostContext);
@@ -41,21 +42,29 @@ function ViewMore() {
 
     if (context.posts.length !== 0)
         return (
-            <Box>
-                {userContext.loggedInUser != null && (
+            <Box p={3}>
+                <Stack direction={"row"} spacing={2}>
+                    {userContext.loggedInUser != null && (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleBack}
+                            startIcon={<ArrowBackIcon />}
+                        >
+                            Back
+                        </Button>
+                    )}
                     <Button
                         variant="contained"
-                        sx={{ bgcolor: "orange" }}
-                        onClick={handleBack}
+                        color="secondary"
+                        onClick={handleCopy}
+                        startIcon={<ContentCopy />}
                     >
-                        <ArrowBackIcon />
+                        Copy link to clipboard
                     </Button>
-                )}
-                <Button variant="contained" onClick={handleCopy}>
-                    Copy to clipboard
-                </Button>
+                </Stack>
 
-                <Stack direction={"row"} spacing={5} p={3}>
+                <Stack direction={"row"} spacing={5} my={2}>
                     <ViewMoreLeft selectedPost={selectedPost} />
                     <ViewMoreCenter selectedPost={selectedPost} />
                     <ViewMoreRight selectedPost={selectedPost} />
@@ -64,10 +73,13 @@ function ViewMore() {
         );
     else
         return (
-            <>
-                <Typography variant="h1">Loading...</Typography>
-                <CircularProgress />
-            </>
+            <Stack
+                direction={"row"}
+                justifyContent={"center"}
+                alignItems={"center"}
+            >
+                <CircularProgress color="secondary" />
+            </Stack>
         );
 }
 
