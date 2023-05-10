@@ -16,6 +16,7 @@ import {
 import { ref as dbRef, push, set, update } from "firebase/database";
 import { database, storage } from "../../../firebase";
 import { MuiFileInput } from "mui-file-input";
+import context from "react-bootstrap/esm/AccordionContext";
 
 function AddPhoto({ selectedPost }) {
     const [openModal, setOpenModal] = useState(false);
@@ -72,9 +73,11 @@ function AddPhoto({ selectedPost }) {
 
     return (
         <>
-            <Button variant="contained" onClick={() => setOpenModal(true)}>
-                Contribute
-            </Button>
+            {context.loggedInUser && (
+                <Button variant="contained" onClick={() => setOpenModal(true)}>
+                    Contribute
+                </Button>
+            )}
 
             <Dialog open={openModal} onClose={() => setOpenModal(false)}>
                 <DialogTitle id="alert-dialog-title">
