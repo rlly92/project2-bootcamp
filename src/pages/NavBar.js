@@ -31,7 +31,7 @@ const NavBar = ({ handleLogOut }) => {
     };
 
     const handleProfileClick = () => {
-        navigate("/user/currentloggedinuser");
+        navigate(`/user/${displayName}`);
     };
 
     return (
