@@ -6,7 +6,7 @@ import {
     DialogContentText,
     DialogTitle,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import {
     ref as sRef,
@@ -17,12 +17,15 @@ import { ref as dbRef, push, set, update } from "firebase/database";
 import { database, storage } from "../../../firebase";
 import { MuiFileInput } from "mui-file-input";
 import context from "react-bootstrap/esm/AccordionContext";
+import { UserContext } from "../../../App";
 
 function AddPhoto({ selectedPost }) {
     const [openModal, setOpenModal] = useState(false);
 
     const [file, setFile] = useState([]);
     const [fileErrorText, setFileErrorText] = useState("");
+
+    const userContext = useContext(UserContext);
 
     const uploadFile = async (files, postKey) => {
         if (files == null) return 0;
@@ -73,7 +76,7 @@ function AddPhoto({ selectedPost }) {
 
     return (
         <>
-            {context.loggedInUser && (
+            {userContext.loggedInUser && (
                 <Button variant="contained" onClick={() => setOpenModal(true)}>
                     Contribute
                 </Button>
