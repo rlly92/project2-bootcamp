@@ -14,11 +14,17 @@ import {
     responsiveFontSizes,
 } from "@mui/material";
 
-import "lightgallery/css/lightgallery.css";
-import "lightgallery/css/lg-zoom.css";
-import "lightgallery/css/lg-thumbnail.css";
-
 let theme = createTheme({
+    palette: {
+        mode: "light",
+        primary: {
+            main: "#ffd600",
+            dark: "#f5cc00",
+        },
+        secondary: {
+            main: "#414141",
+        },
+    },
     typography: {
         h1: {
             fontWeight: 700,

@@ -11,6 +11,7 @@ import ReviewsComposer from "./ReviewsComposer";
 import format from "date-fns/format";
 import ReviewLikesButton from "../Shared/ReviewLikesButton";
 import { UserContext } from "../../App";
+import Lightbox from "../Lightbox/Lightbox";
 
 function ReviewsSection({ selectedPost }) {
     const [mode, setMode] = useState("view");
@@ -54,30 +55,21 @@ function ReviewsSection({ selectedPost }) {
                                         : "👎 Not Recommended..."}
                                 </Typography>
                                 <Paper
+                                    elevation={0}
                                     sx={{
-                                        width: "30vw",
+                                        // width: "30vw",
+                                        width: "33vw",
                                         height: "20vh",
                                         overflowY: "hidden",
                                         overflowX: "auto",
                                     }}
                                 >
-                                    <Stack direction={"row"} spacing={2}>
-                                        {Object.values(review.images).map(
-                                            (url) => {
-                                                return (
-                                                    <a href={url} key={url}>
-                                                        <img
-                                                            alt=""
-                                                            src={url}
-                                                            style={{
-                                                                height: "17vh",
-                                                                width: "auto",
-                                                            }}
-                                                        />
-                                                    </a>
-                                                );
-                                            }
-                                        )}
+                                    <Stack direction={"row"}>
+                                        <Lightbox
+                                            urlArray={Object.values(
+                                                review.images
+                                            )}
+                                        />
                                     </Stack>
                                 </Paper>
                                 <br />
