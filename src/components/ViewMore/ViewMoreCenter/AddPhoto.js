@@ -74,6 +74,7 @@ function AddPhoto({ selectedPost }) {
         });
 
         setFile([]);
+        setOpenModal(false);
     };
 
     return (

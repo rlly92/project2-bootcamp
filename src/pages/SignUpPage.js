@@ -5,7 +5,7 @@ import {
     getAuth,
 } from "firebase/auth";
 import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../App";
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { toast } from "react-toastify";
@@ -91,9 +91,11 @@ const SignUpPage = () => {
             </form>
             <br />
             <br />
-            <Button variant="contained" color="secondary">
-                Back to main
-            </Button>
+            <Link to="/">
+                <Button variant="contained" color="secondary">
+                    Back to main
+                </Button>
+            </Link>
         </Stack>
     );
 };
