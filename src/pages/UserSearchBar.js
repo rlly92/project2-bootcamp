@@ -45,16 +45,15 @@ function SearchBar() {
                     }
                     noOptionsText={"NO USERS CAN BE FOUND"}
                     renderOption={(props, option) => (
-                        <Box component="li" {...props} key={option.displayName}>
-                            {/* <a href={`/post/-NUmPvLNNB6qql9Zepw1`}> */}
-                            <a
-                                href=""
-                                onClick={() =>
-                                    handleUserSelection(option.displayName)
-                                }
-                            >
-                                {option.displayName}
-                            </a>
+                        <Box
+                            component="li"
+                            {...props}
+                            key={option.displayName}
+                            onClick={() =>
+                                handleUserSelection(option.displayName)
+                            }
+                        >
+                            {option.displayName}
                         </Box>
                     )}
                     renderInput={(params) => (

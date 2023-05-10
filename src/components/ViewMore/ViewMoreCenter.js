@@ -2,8 +2,10 @@ import { Box, Typography } from "@mui/material";
 import React from "react";
 
 import CommentsSection from "../Sidebar/SideInfo/CommentsSection";
-import LightGallery from "lightgallery/react";
+
 import ChipsSection from "./ViewMoreCenter/ChipsSection";
+import Lightbox from "../Lightbox/Lightbox";
+import AddPhoto from "./ViewMoreCenter/AddPhoto";
 
 function ViewMoreCenter({ selectedPost }) {
     let urlArray = Object.values(selectedPost.images);
@@ -16,24 +18,9 @@ function ViewMoreCenter({ selectedPost }) {
             <ChipsSection tags={selectedPost.tags} postKey={selectedPost.key} />
             <br />
             <Typography variant="h5">Photo gallery 🤳</Typography>
-            <Box height={"50vh"} sx={{ overflowY: "scroll" }}>
-                <LightGallery speed={500}>
-                    {urlArray.map((url) => {
-                        return (
-                            <a href={url} key={url}>
-                                <img
-                                    alt=""
-                                    src={url}
-                                    style={{
-                                        height: "20vh",
-                                        border: "3px solid red",
-                                    }}
-                                    loading="lazy"
-                                />
-                            </a>
-                        );
-                    })}
-                </LightGallery>
+            <AddPhoto selectedPost={selectedPost} />
+            <Box sx={{ overflowY: "scroll", maxHeight: "50vh" }}>
+                <Lightbox urlArray={urlArray} />
             </Box>
             <br />
             <Typography variant="h5">Drop a comment! 💌</Typography>
