@@ -9,7 +9,6 @@ function ImageCarousel({ selectedPost }) {
     if (selectedPost.images == null)
         return <Typography variant="body1">No images yet. 🥱</Typography>;
     let urlArray = Object.values(selectedPost.images);
-    console.log(urlArray);
     let carouselRender;
     if (urlArray.length > 5)
         carouselRender = urlArray.slice(0, 5).map((url) => {
