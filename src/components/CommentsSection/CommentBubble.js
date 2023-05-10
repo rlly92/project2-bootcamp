@@ -66,7 +66,7 @@ function CommentBubble({
         <Paper sx={{ py: 1, px: 2, my: 1 }}>
             {editMode === false && (
                 <>
-                    <Typography variant="h6">{author}</Typography>
+                    <Typography variant="h6">@{author}</Typography>
                     <Typography variant="body1">{text}</Typography>
                     <Typography variant="overline" sx={{ fontSize: "10px" }}>
                         {formatDistanceToNow(new Date(date))} ago
