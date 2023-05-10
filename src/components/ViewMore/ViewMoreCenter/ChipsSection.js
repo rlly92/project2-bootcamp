@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
 import ChipsArray from "../../Sidebar/SideInfo/ChipsArray";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
 import ChipsComposer from "./ChipsComposer";
 import { UserContext } from "../../../App";
+import { Add } from "@mui/icons-material";
 
 function ChipsSection(props) {
     const [mode, setMode] = useState("view");
@@ -13,9 +14,15 @@ function ChipsSection(props) {
         <Box>
             <ChipsArray {...props} />
             {mode === "view" && userContext.loggedInUser && (
-                <Button variant="contained" onClick={() => setMode("edit")}>
-                    Contribute
-                </Button>
+                <Stack direction={"row"} justifyContent={"flex-end"}>
+                    <Button
+                        startIcon={<Add />}
+                        variant="contained"
+                        onClick={() => setMode("edit")}
+                    >
+                        Contribute
+                    </Button>
+                </Stack>
             )}
             {mode === "edit" && <ChipsComposer {...props} setMode={setMode} />}
         </Box>

@@ -11,11 +11,7 @@ function SidebarWrapper({ children }) {
             sx={{ overflowY: "auto" }}
             height={"100%"}
         >
-            <Stack
-                textAlign={"center"}
-                alignItems={"center"}
-                justifyContent={"center"}
-            >
+            <Stack alignItems={"center"} justifyContent={"center"}>
                 {children}
             </Stack>
         </Box>

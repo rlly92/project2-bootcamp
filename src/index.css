@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap");
+
 *,
 *::before,
 *::after,
@@ -14,6 +16,7 @@ h6 {
 
 body {
     margin: 0;
+    background-color: #99ec18;
 }
 
 ::-webkit-scrollbar {
@@ -22,12 +25,12 @@ body {
 }
 
 ::-webkit-scrollbar-track-piece {
-    background-color: #fff;
+    background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
     background-color: #cbcbcb;
-    outline: 2px solid #fff;
+    outline: 2px solid #f3f3f3;
     outline-offset: -2px;
     border: 0.1px solid #b7b7b7;
     border-radius: 20px;

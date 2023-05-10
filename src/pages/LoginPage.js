@@ -4,6 +4,8 @@ import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
+import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
     const [state, setState] = useState({ emailInput: "", passwordInput: "" });
@@ -20,7 +22,19 @@ const LoginPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        signInWithEmailAndPassword(auth, state.emailInput, state.passwordInput)
+        toast
+            .promise(
+                signInWithEmailAndPassword(
+                    auth,
+                    state.emailInput,
+                    state.passwordInput
+                ),
+                {
+                    pending: "Logging in...",
+                    success: "Successfully logged in!",
+                    error: "Oops, check your email and password.",
+                }
+            )
             .then((userCredential) => {
                 console.log("somebody has signed in");
             })
@@ -41,27 +55,54 @@ const LoginPage = () => {
     };
 
     return (
-        <div>
+        <Stack alignItems={"center"} justifyContent={"center"} my={5}>
+            <Paper sx={{ px: 5, py: 4, my: 7 }} elevation={0}>
+                <Typography
+                    variant="h1"
+                    sx={{ fontFamily: "'Yeseva One', cursive" }}
+                >
+                    bazzinga!
+                </Typography>
+            </Paper>
+            <Typography variant="h2">Join the band of bazzingers.</Typography>
             <form onSubmit={handleSubmit}>
-                <input
-                    value={state.emailInput}
-                    name="emailInput"
-                    type="email"
-                    placeholder="enter your email here"
-                    onChange={handleChange}
-                ></input>
-                <input
-                    value={state.passwordInput}
-                    name="passwordInput"
-                    type="password"
-                    placeholder="give me your password"
-                    onChange={handleChange}
-                ></input>
-                <button type="submit">Login</button>
-                <br />
-                <Link to="signup">sign up</Link>
+                <Stack
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    spacing={2}
+                    mt={2}
+                >
+                    <TextField
+                        required
+                        size="small"
+                        label="Email"
+                        value={state.emailInput}
+                        name="emailInput"
+                        type="email"
+                        onChange={handleChange}
+                    ></TextField>
+                    <TextField
+                        required
+                        size="small"
+                        value={state.passwordInput}
+                        name="passwordInput"
+                        type="password"
+                        label="Password"
+                        onChange={handleChange}
+                    ></TextField>
+                    <Button type="submit" variant="contained">
+                        Login
+                    </Button>
+                    <br />
+                    <Typography variant="h4">
+                        Not part of the community yet?
+                    </Typography>
+                    <Link to="signup">
+                        <Button variant="contained">sign up</Button>
+                    </Link>
+                </Stack>
             </form>
-        </div>
+        </Stack>
     );
 };
 

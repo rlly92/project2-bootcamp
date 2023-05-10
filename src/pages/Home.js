@@ -10,7 +10,7 @@ import { useJsApiLoader, GoogleMap, Marker } from "@react-google-maps/api";
 
 import { useNavigate } from "react-router-dom";
 
-import { Typography, Box, Button, TextField } from "@mui/material";
+import { Typography, Box, Button, TextField, Paper } from "@mui/material";
 
 import Geocode from "react-geocode";
 import BazaarForm from "../components/BazaarForm/BazaarForm";
@@ -130,21 +130,25 @@ function Home({ handleLogOut }) {
             height={"100%"}
             display={"flex"}
             flexDirection={"row"}
-            textAlign={"center"}
         >
             <SidebarWrapper>
-                <Typography variant="body1">
-                    Type in a place or click on the map to get started
+                <Typography variant="h4">
+                    Welcome back, @{displayName}
+                </Typography>
+                <Typography variant="body1" mt={1} mb={2}>
+                    Click anywhere on the map to get started.
                 </Typography>
                 {/* <TextField variant="outlined" size="small" /> */}
                 {markerCoords && (
                     <>
                         <Typography variant="h3">Current position:</Typography>
                         {nameAtMarkerCoords === "" ? (
-                            <Typography variant="body1">
-                                Lat: {markerCoords.toJSON().lat.toFixed(4)},
-                                Lng: {markerCoords.toJSON().lng.toFixed(4)}
-                            </Typography>
+                            <Paper sx={{ p: 2, my: 1 }} elevation={4}>
+                                <Typography variant="body1">
+                                    Lat: {markerCoords.toJSON().lat.toFixed(4)},
+                                    Lng: {markerCoords.toJSON().lng.toFixed(4)}
+                                </Typography>
+                            </Paper>
                         ) : (
                             <Typography variant="body1">
                                 {nameAtMarkerCoords}
@@ -153,14 +157,15 @@ function Home({ handleLogOut }) {
 
                         <Button
                             variant="contained"
-                            sx={{ width: "50%", m: 1 }}
+                            sx={{ width: "50%", my: 2 }}
                             onClick={handleTagLocation}
                         >
                             Tag this location!
                         </Button>
                         <Button
                             variant="contained"
-                            sx={{ width: "50%", m: 1 }}
+                            color="secondary"
+                            sx={{ width: "50%" }}
                             onClick={handleClearMarker}
                         >
                             Clear Marker

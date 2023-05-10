@@ -11,6 +11,9 @@ import {
     getDownloadURL,
 } from "firebase/storage";
 import { database, storage } from "../firebase";
+import { Button, Stack, TextField, Typography } from "@mui/material";
+import { MuiFileInput } from "mui-file-input";
+import { toast } from "react-toastify";
 
 const DB_USERINFO_KEY = "user_info";
 const STORAGE_USER_PROFILEPIC_KEY = "user_profilepic";
@@ -73,6 +76,7 @@ function CreateProfile() {
                 })
                 .then(() => {
                     console.log("Profile updated successfully!");
+                    toast.success("Successfully updated your profile!");
                 })
                 .catch((error) => {
                     console.error("Error updating profile:", error);
@@ -90,21 +94,21 @@ function CreateProfile() {
         );
 
         if (userObject != null) {
-            alert(
+            toast.error(
                 "This username already exists. Please choose another username"
             );
             return;
         }
 
         if (!/^[a-z0-9]+$/.test(state.displayName)) {
-            alert(
+            toast.error(
                 "Invalid input. Please input only lowercase letters and numbers. No symbols or spaces allowed"
             );
             return;
         }
 
         if (state.profilePic == null) {
-            alert("Please upload a profile picture");
+            toast.error("Please upload a profile picture");
             return;
         }
 
@@ -123,19 +127,44 @@ function CreateProfile() {
     };
 
     return (
-        <div>
+        <Stack alignItems={"center"} justifyContent={"center"} my={5}>
+            <Typography variant="h2">Hello there! 👋</Typography>
+            <Typography variant="h4" my={2}>
+                Welcome to the Bazzinga community!
+            </Typography>
             <form onSubmit={handleSubmit}>
-                <input
-                    value={state.displayName}
-                    id="displayName"
-                    type="displayName"
-                    placeholder="enter your username here"
-                    onChange={handleChange}
-                ></input>
-                <input type="file" onChange={handleFileChange} />
-                <button type="submit">Submit Username and Profile Pic</button>
+                <Stack
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    spacing={2}
+                >
+                    <Typography variant="subtitle1">
+                        How should we address you?
+                    </Typography>
+                    <TextField
+                        required
+                        size="small"
+                        value={state.displayName}
+                        id="displayName"
+                        type="displayName"
+                        label="Username"
+                        onChange={handleChange}
+                    ></TextField>
+                    <Typography variant="subtitle1">
+                        What do you look like?
+                    </Typography>
+                    <TextField
+                        type="file"
+                        onChange={handleFileChange}
+                        size="small"
+                        placeholder="Click here to submit an image"
+                    />
+                    <Button type="submit" variant="contained">
+                        Submit
+                    </Button>
+                </Stack>
             </form>
-        </div>
+        </Stack>
     );
 }
 export default CreateProfile;

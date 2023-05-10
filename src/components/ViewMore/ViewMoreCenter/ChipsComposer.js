@@ -104,7 +104,9 @@ function ChipsComposer({ tags, postKey, setMode }) {
                 }
             />
             <Button type="submit">Submit</Button>
-            <Button type="button">Cancel</Button>
+            <Button type="button" onClick={() => setMode("view")}>
+                Cancel
+            </Button>
         </form>
     );
 }

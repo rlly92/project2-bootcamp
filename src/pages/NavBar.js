@@ -45,22 +45,21 @@ const NavBar = ({ handleLogOut }) => {
                     >
                         <Button
                             variant="contained"
-                            // sx={{ width: "50%", m: 1 }}
                             onClick={bazzingaButton}
                             type="button"
+                            disableElevation
                         >
-                            BAZZINGA
+                            <Typography
+                                variant="h5"
+                                sx={{ fontFamily: "'Yeseva One', cursive" }}
+                            >
+                                bazzinga!
+                            </Typography>
                         </Button>
                     </Typography>
 
                     {context.loggedInUser != null ? (
-                        <Typography
-                            variant="h6"
-                            component="div"
-                            sx={{ flexGrow: 1 }}
-                        >
-                            {displayName}'s Favourite Bazaars
-                        </Typography>
+                        ""
                     ) : (
                         <Typography
                             variant="h6"
@@ -79,6 +78,7 @@ const NavBar = ({ handleLogOut }) => {
                                     variant="contained"
                                     onClick={handleProfileClick}
                                     type="button"
+                                    disableElevation
                                     startIcon={
                                         <Avatar
                                             src={context.loggedInUser.photoURL}
@@ -90,7 +90,7 @@ const NavBar = ({ handleLogOut }) => {
 
                                 <Button
                                     variant="contained"
-                                    // sx={{ width: "50%", m: 1 }}
+                                    disableElevation
                                     onClick={handleLogOutAndNavigateToLogin}
                                     type="button"
                                 >

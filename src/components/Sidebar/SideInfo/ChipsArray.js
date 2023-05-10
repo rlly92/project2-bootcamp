@@ -122,7 +122,7 @@ export default function ChipsArray({ tags, postKey }) {
                 flexWrap: "wrap",
                 listStyle: "none",
                 p: 0.5,
-                m: 0,
+                my: 2,
             }}
             component="ul"
             elevation={0}
@@ -145,6 +145,12 @@ export default function ChipsArray({ tags, postKey }) {
                                 tags[key].likes[context.loggedInUser.uid]
                                     ? "filled"
                                     : "outlined"
+                            }
+                            color={
+                                context.loggedInUser &&
+                                tags[key].likes[context.loggedInUser.uid]
+                                    ? "primary"
+                                    : "secondary"
                             }
                             onDelete={
                                 context.loggedInUser &&

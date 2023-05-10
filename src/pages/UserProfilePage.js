@@ -6,6 +6,8 @@ import { UserContext } from "../App";
 import { UserInfoContext } from "../components/UserInfoContext/UserInfoProvider";
 import { ref as storageRef } from "firebase/storage";
 import { database, storage } from "../firebase";
+import Image from "mui-image";
+import { Paper, Stack, Typography } from "@mui/material";
 
 const DB_USERINFO_KEY = "user_info";
 const STORAGE_USER_PROFILEPIC_KEY = "user_profilepic";
@@ -35,6 +37,8 @@ function UserProfilePage(props) {
     // use username to filter through the userInfoData and find and then store
     // the current user's data in currentUserData so that it can be rendered
 
+    let timeCreated;
+
     const profilePic = () => {
         const currentUser = userInfoData.userInfo.find(
             (user) => user.displayName === username
@@ -43,13 +47,20 @@ function UserProfilePage(props) {
         console.log(currentUser);
 
         if (currentUser == null) {
-            return <h1>still loading...</h1>;
+            return <h1>Loading...</h1>;
         } else if (currentUser && currentUser.photoURL) {
+            timeCreated = currentUser.timeCreated;
             return (
                 <img
-                    style={{ height: "300px", width: "300px" }}
                     src={currentUser.photoURL}
-                    alt="Profile pic"
+                    showLoading
+                    style={{
+                        maxHeight: "300px",
+                        aspectRatio: "1",
+                        objectFit: "contain",
+                        borderRadius: "10px",
+                    }}
+                    alt=""
                 />
             );
         } else {
@@ -61,10 +72,19 @@ function UserProfilePage(props) {
     const userProfilePicRef = storageRef(storage, STORAGE_USER_PROFILEPIC_KEY);
 
     return (
-        <div>
-            <h1>Welcome to {username} 's page! Browse wisely.</h1>
-            {profilePic()}
-        </div>
+        <Stack alignItems={"center"} justifyContent={"center"} mt={5}>
+            <Paper sx={{ width: "50%", py: 4, px: 3 }}>
+                <Stack direction={"row"} spacing={3}>
+                    {profilePic()}
+                    <Stack>
+                        <Typography variant="h2">@{username}</Typography>
+                        <Typography variant="subtitle1">
+                            Date joined: {timeCreated}
+                        </Typography>
+                    </Stack>
+                </Stack>
+            </Paper>
+        </Stack>
     );
 }
 

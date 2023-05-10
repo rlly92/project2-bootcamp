@@ -75,7 +75,7 @@ const App = () => {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover={false}
-                theme="dark"
+                theme="light"
                 style={{ width: "500px" }}
             />
             <UserContext.Provider value={context}>

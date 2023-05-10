@@ -1,4 +1,11 @@
-import { Button, Paper, TextField, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Paper,
+    Stack,
+    TextField,
+    Typography,
+} from "@mui/material";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { ref as dbRef, update } from "firebase/database";
 import React, { useState } from "react";
@@ -68,25 +75,34 @@ function CommentBubble({
                 <>
                     <Typography variant="h6">@{author}</Typography>
                     <Typography variant="body1">{text}</Typography>
-                    <Typography variant="overline" sx={{ fontSize: "10px" }}>
-                        {formatDistanceToNow(new Date(date))} ago
-                    </Typography>
-                    {loggedInUser && loggedInUser.uid === authorUid ? (
-                        <>
-                            <Button onClick={() => setEditMode(true)}>
-                                Edit
-                            </Button>
-                            <Button
-                                onClick={() =>
-                                    handleDelete(postKey, commentKey)
-                                }
-                            >
-                                Delete
-                            </Button>
-                        </>
-                    ) : (
-                        ""
-                    )}
+                    <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        justifyContent={"space-between"}
+                    >
+                        <Typography
+                            variant="overline"
+                            sx={{ fontSize: "10px" }}
+                        >
+                            {formatDistanceToNow(new Date(date))} ago
+                        </Typography>
+                        {loggedInUser && loggedInUser.uid === authorUid ? (
+                            <Box>
+                                <Button onClick={() => setEditMode(true)}>
+                                    Edit
+                                </Button>
+                                <Button
+                                    onClick={() =>
+                                        handleDelete(postKey, commentKey)
+                                    }
+                                >
+                                    Delete
+                                </Button>
+                            </Box>
+                        ) : (
+                            ""
+                        )}
+                    </Stack>
                 </>
             )}
             {editMode === true && (

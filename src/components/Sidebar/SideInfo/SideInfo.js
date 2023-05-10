@@ -1,5 +1,6 @@
 import {
     Button,
+    Box,
     Dialog,
     DialogActions,
     DialogContent,
@@ -140,25 +141,33 @@ function SideInfo({ selectedPost }) {
     return (
         <Paper
             sx={{
-                py: 3,
-                px: 1,
+                py: 2,
+                px: 3,
                 width: "100%",
             }}
         >
-            <Button onClick={handleViewMore}>View More</Button>
-            {((userContext.loggedInUser &&
-                userContext.loggedInUser.uid === selectedPost.authorUid) ||
-                (userContext.loggedInUser &&
-                    isAfter(
-                        new Date(selectedPost.duration.endDate),
-                        Date.now
-                    ))) && (
-                <Tooltip title="More Options">
-                    <IconButton onClick={handleMoreOptionsClick}>
-                        <MoreVert />
-                    </IconButton>
-                </Tooltip>
-            )}
+            <Stack direction={"row"} justifyContent={"space-between"}>
+                <Button
+                    onClick={handleViewMore}
+                    variant="outlined"
+                    color="secondary"
+                >
+                    View More
+                </Button>
+                {((userContext.loggedInUser &&
+                    userContext.loggedInUser.uid === selectedPost.authorUid) ||
+                    (userContext.loggedInUser &&
+                        isAfter(
+                            new Date(selectedPost.duration.endDate),
+                            Date.now
+                        ))) && (
+                    <Tooltip title="More Options">
+                        <IconButton onClick={handleMoreOptionsClick}>
+                            <MoreVert />
+                        </IconButton>
+                    </Tooltip>
+                )}
+            </Stack>
 
             <Menu
                 id="basic-menu"
@@ -187,40 +196,57 @@ function SideInfo({ selectedPost }) {
                 </MenuItem>
             </Menu>
 
-            <Typography variant="h4">{selectedPost.eventName}</Typography>
-
-            <Typography variant="subtitle2">
-                Posted by @{selectedPost.authorDisplayName} on{" "}
-                {new Date(selectedPost.date).toLocaleString("en-SG")}
-            </Typography>
-
-            <LikesDislikesBar selectedPost={selectedPost} />
-
-            {selectedPost.website ? (
-                <Typography variant="body2">
-                    Homepage: {selectedPost.website}
+            <Box textAlign={"center"}>
+                <Typography variant="h4" mt={2}>
+                    {selectedPost.eventName}
                 </Typography>
-            ) : (
-                <Typography variant="body2">
-                    No website was provided.
+
+                <Typography variant="subtitle2">
+                    Posted by @{selectedPost.authorDisplayName} on{" "}
+                    {new Date(selectedPost.date).toLocaleString("en-SG")}
                 </Typography>
-            )}
 
-            <Typography variant="h5">📍 {selectedPost.geocodeName}</Typography>
+                <Stack
+                    direction={"row"}
+                    alignItems={"center"}
+                    justifyContent={"center"}
+                    my={1}
+                >
+                    <LikesDislikesBar selectedPost={selectedPost} />
+                </Stack>
 
-            <Typography variant="h6">
-                From {format(new Date(selectedPost.duration.startDate), "PPP")}{" "}
-                to {format(new Date(selectedPost.duration.endDate), "PPP")}
-            </Typography>
+                <Typography variant="body2">
+                    Type: {selectedPost.type}
+                </Typography>
+                {selectedPost.website ? (
+                    <Typography variant="body2" mb={1}>
+                        Website: {selectedPost.website}
+                    </Typography>
+                ) : (
+                    <Typography variant="body2">
+                        No website was provided.
+                    </Typography>
+                )}
 
-            <ImageCarousel selectedPost={selectedPost} />
+                <Typography variant="h5" mb={1}>
+                    📍 {selectedPost.geocodeName}
+                </Typography>
 
-            <Typography variant="body2">Type: {selectedPost.type}</Typography>
+                <Typography variant="h6" mb={1}>
+                    From{" "}
+                    {format(new Date(selectedPost.duration.startDate), "PPP")}{" "}
+                    to {format(new Date(selectedPost.duration.endDate), "PPP")}
+                </Typography>
 
-            <Typography>Tags:</Typography>
-            <ChipsArray tags={selectedPost.tags} postKey={selectedPost.key} />
+                <ImageCarousel selectedPost={selectedPost} />
 
-            <Typography variant="h5">Comments:</Typography>
+                <ChipsArray
+                    tags={selectedPost.tags}
+                    postKey={selectedPost.key}
+                />
+
+                <Typography variant="h5">Comments:</Typography>
+            </Box>
             <CommentsSection selectedPost={selectedPost} loadLocation="home" />
 
             <Dialog
