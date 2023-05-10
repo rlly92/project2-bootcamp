@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FsLightbox from "fslightbox-react";
+import { Paper } from "@mui/material";
 
 function Lightbox({ urlArray }) {
     const [toggler, setToggler] = useState(false);
@@ -16,11 +17,12 @@ function Lightbox({ urlArray }) {
                 return (
                     <img
                         alt=""
-                        key={url}
                         src={url}
+                        className="img-shadow"
                         style={{
                             height: "20vh",
-                            border: "3px solid red",
+                            border: "10px solid white",
+                            borderRadius: "3px",
                         }}
                         loading="lazy"
                         onClick={() => handleClick(index)}

@@ -5,6 +5,7 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
+    Stack,
 } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
@@ -18,6 +19,7 @@ import { database, storage } from "../../../firebase";
 import { MuiFileInput } from "mui-file-input";
 import context from "react-bootstrap/esm/AccordionContext";
 import { UserContext } from "../../../App";
+import { Add } from "@mui/icons-material";
 
 function AddPhoto({ selectedPost }) {
     const [openModal, setOpenModal] = useState(false);
@@ -77,9 +79,15 @@ function AddPhoto({ selectedPost }) {
     return (
         <>
             {userContext.loggedInUser && (
-                <Button variant="contained" onClick={() => setOpenModal(true)}>
-                    Contribute
-                </Button>
+                <Stack direction={"row"} justifyContent={"flex-end"}>
+                    <Button
+                        startIcon={<Add />}
+                        variant="contained"
+                        onClick={() => setOpenModal(true)}
+                    >
+                        Contribute
+                    </Button>
+                </Stack>
             )}
 
             <Dialog open={openModal} onClose={() => setOpenModal(false)}>

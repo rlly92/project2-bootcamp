@@ -12,6 +12,7 @@ import format from "date-fns/format";
 import ReviewLikesButton from "../Shared/ReviewLikesButton";
 import { UserContext } from "../../App";
 import Lightbox from "../Lightbox/Lightbox";
+import { Add } from "@mui/icons-material";
 
 function ReviewsSection({ selectedPost }) {
     const [mode, setMode] = useState("view");
@@ -49,12 +50,24 @@ function ReviewsSection({ selectedPost }) {
                                 <Typography variant="overline">
                                     {format(new Date(review.date), "PPP")}
                                 </Typography>
-                                <Typography variant="h6">
-                                    {review.recommended === true
-                                        ? "👍 Recommended!"
-                                        : "👎 Not Recommended..."}
-                                </Typography>
                                 <Paper
+                                    elevation={0}
+                                    sx={{
+                                        bgcolor: review.recommended
+                                            ? "#E7FFDD"
+                                            : "#FFDDDD",
+                                        width: "fit-content",
+                                        px: 2,
+                                        py: 1,
+                                    }}
+                                >
+                                    <Typography variant="h6">
+                                        {review.recommended === true
+                                            ? "👍 Recommended!"
+                                            : "👎 Not Recommended..."}
+                                    </Typography>
+                                </Paper>
+                                {/* <Paper
                                     elevation={0}
                                     sx={{
                                         // width: "30vw",
@@ -62,6 +75,18 @@ function ReviewsSection({ selectedPost }) {
                                         height: "20vh",
                                         overflowY: "hidden",
                                         overflowX: "auto",
+                                    }}
+                                > */}
+                                <Box
+                                    sx={{
+                                        width: "33vw",
+                                        height: "24vh",
+                                        overflowY: "hidden",
+                                        overflowX: "auto",
+                                        p: 2,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "5px",
                                     }}
                                 >
                                     <Stack direction={"row"}>
@@ -71,7 +96,8 @@ function ReviewsSection({ selectedPost }) {
                                             )}
                                         />
                                     </Stack>
-                                </Paper>
+                                </Box>
+                                {/* </Paper> */}
                                 <br />
                                 <Typography variant="body1">
                                     {review.text}
@@ -91,9 +117,15 @@ function ReviewsSection({ selectedPost }) {
     return (
         <Box>
             {mode === "view" && userContext.loggedInUser != null && (
-                <Button variant="contained" onClick={handleNewReview}>
-                    Submit a review
-                </Button>
+                <Box my={1}>
+                    <Button
+                        variant="contained"
+                        startIcon={<Add />}
+                        onClick={handleNewReview}
+                    >
+                        Submit a review
+                    </Button>
+                </Box>
             )}
 
             {mode === "view" && reviewsRender}

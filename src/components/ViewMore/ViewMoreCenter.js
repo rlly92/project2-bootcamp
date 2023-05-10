@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import React from "react";
 
 import CommentsSection from "../Sidebar/SideInfo/CommentsSection";
@@ -12,25 +12,47 @@ function ViewMoreCenter({ selectedPost }) {
 
     return (
         <Box flex={3}>
-            <Typography variant="h5">
-                Here's what to expect of this event: 🍃
-            </Typography>
-            <ChipsSection tags={selectedPost.tags} postKey={selectedPost.key} />
-            <br />
-            <Typography variant="h5">Photo gallery 🤳</Typography>
-            <AddPhoto selectedPost={selectedPost} />
-            <Box sx={{ overflowY: "scroll", maxHeight: "50vh" }}>
-                <Lightbox urlArray={urlArray} />
-            </Box>
-            <br />
-            <Typography variant="h5">Drop a comment! 💌</Typography>
-            <Typography variant="body1">
-                Will you be visiting soon? Let the rest of us know!
-            </Typography>
-            <CommentsSection
-                selectedPost={selectedPost}
-                loadLocation="viewmore"
-            />
+            <Paper sx={{ p: 3 }}>
+                <Typography variant="h4">
+                    Here's what to expect of this event: 🍃
+                </Typography>
+                <ChipsSection
+                    tags={selectedPost.tags}
+                    postKey={selectedPost.key}
+                />
+            </Paper>
+            <Paper sx={{ p: 3, mt: 3 }}>
+                <Typography variant="h4">Photo gallery 🤳</Typography>
+                <Typography variant="subtitle1">
+                    Leave your memories anonymously.
+                </Typography>
+                <Box
+                    sx={{
+                        overflowY: "auto",
+                        maxHeight: "50vh",
+                        mt: 2,
+                        mb: 3,
+                        p: 2,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                    }}
+                >
+                    <Lightbox urlArray={urlArray} />
+                </Box>
+                <AddPhoto selectedPost={selectedPost} />
+            </Paper>
+
+            <Paper sx={{ p: 3, mt: 3 }}>
+                <Typography variant="h4">Drop a comment! 💌</Typography>
+                <Typography variant="subtitle1">
+                    Will you be visiting soon? Let the rest of us know!
+                </Typography>
+                <CommentsSection
+                    selectedPost={selectedPost}
+                    loadLocation="viewmore"
+                />
+            </Paper>
         </Box>
     );
 }
