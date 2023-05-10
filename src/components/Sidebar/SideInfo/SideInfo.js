@@ -11,11 +11,13 @@ import {
     Menu,
     MenuItem,
     Paper,
+    Stack,
+    TextField,
     Tooltip,
     Typography,
 } from "@mui/material";
 import format from "date-fns/format";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LikesDislikesBar from "./LikesDislikesBar";
 import CommentsSection from "./CommentsSection";
 import ImageCarousel from "./ImageCarousel";
@@ -30,24 +32,61 @@ import { database } from "../../../firebase";
 import { toast } from "react-toastify";
 
 import isAfter from "date-fns/isAfter";
+import isBefore from "date-fns/isBefore";
+
+const typeOptions = [{ value: "Pasar Malam" }, { value: "Pop Up Store" }];
 
 function SideInfo({ selectedPost }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
-    const [openModal, setOpenModal] = useState(false);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+
+    const [formInputs, setFormInputs] = useState({
+        eventName: selectedPost.eventName,
+        website: selectedPost.website == null ? "" : selectedPost.website,
+        startDate: selectedPost.duration.startDate,
+        endDate: selectedPost.duration.endDate,
+        type: selectedPost.type,
+    });
+
+    useEffect(() => {
+        setFormInputs({
+            eventName: selectedPost.eventName,
+            website: selectedPost.website == null ? "" : selectedPost.website,
+            startDate: selectedPost.duration.startDate,
+            endDate: selectedPost.duration.endDate,
+            type: selectedPost.type,
+        });
+    }, [selectedPost]);
 
     const userContext = useContext(UserContext);
-
     const navigate = useNavigate();
 
     const closeMenu = () => {
         setAnchorEl(null);
     };
 
-    const handleClickDeleteInMenu = () => {
-        setOpenModal(true);
+    const handleClickInMenu = (button) => {
+        if (button === "delete") {
+            setOpenDeleteModal(true);
+            setAnchorEl(null);
+            return;
+        }
+
+        setOpenEditModal(true);
         setAnchorEl(null);
+        return;
+    };
+
+    const handleChange = (e) => {
+        setFormInputs((prevInputs) => {
+            return {
+                ...prevInputs,
+                [e.target.name]: e.target.value,
+            };
+        });
     };
 
     const handleDelete = (postKey) => {
@@ -63,7 +102,31 @@ function SideInfo({ selectedPost }) {
                 error: "Error! 🤔",
             }
         );
-        console.log("deletion");
+
+        setOpenDeleteModal(false);
+    };
+
+    const handleEdit = (postKey) => {
+        const postRef = dbRef(database, `posts/${postKey}`);
+
+        toast.promise(
+            update(postRef, {
+                eventName: formInputs.eventName,
+                website: formInputs.website ? formInputs.website : "",
+                duration: {
+                    startDate: formInputs.startDate,
+                    endDate: formInputs.endDate,
+                },
+                type: formInputs.type,
+            }),
+            {
+                pending: "Uploading in progress...",
+                success: "Successfully edited post!",
+                error: "Error! 🤔",
+            }
+        );
+
+        setOpenEditModal(false);
     };
 
     const handleViewMore = () => {
@@ -106,13 +169,17 @@ function SideInfo({ selectedPost }) {
                     "aria-labelledby": "basic-button",
                 }}
             >
-                {/* <MenuItem>
-                    <ListItemIcon>
-                        <Edit fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Edit</ListItemText>
-                </MenuItem> */}
-                <MenuItem onClick={handleClickDeleteInMenu}>
+                {userContext.loggedInUser &&
+                    userContext.loggedInUser.uid === selectedPost.authorUid && (
+                        <MenuItem onClick={() => handleClickInMenu("edit")}>
+                            <ListItemIcon>
+                                <Edit fontSize="small" />
+                            </ListItemIcon>
+                            <ListItemText>Edit</ListItemText>
+                        </MenuItem>
+                    )}
+
+                <MenuItem onClick={() => handleClickInMenu("delete")}>
                     <ListItemIcon>
                         <Delete fontSize="small" />
                     </ListItemIcon>
@@ -156,7 +223,10 @@ function SideInfo({ selectedPost }) {
             <Typography variant="h5">Comments:</Typography>
             <CommentsSection selectedPost={selectedPost} loadLocation="home" />
 
-            <Dialog open={openModal} onClose={() => setOpenModal(false)}>
+            <Dialog
+                open={openDeleteModal}
+                onClose={() => setOpenDeleteModal(false)}
+            >
                 <DialogTitle id="alert-dialog-title">
                     Confirm delete?
                 </DialogTitle>
@@ -169,7 +239,128 @@ function SideInfo({ selectedPost }) {
                     <Button onClick={() => handleDelete(selectedPost.key)}>
                         Confirm
                     </Button>
-                    <Button onClick={() => setOpenModal(false)} autoFocus>
+                    <Button onClick={() => setOpenDeleteModal(false)} autoFocus>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={openEditModal}
+                onClose={() => setOpenEditModal(false)}
+            >
+                <DialogTitle id="alert-dialog-title">Edit a post</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        <Stack spacing={1} p={2} alignItems={"flex-start"}>
+                            <TextField
+                                required
+                                name="eventName"
+                                label="Name of Event"
+                                variant="outlined"
+                                size="small"
+                                value={formInputs.eventName}
+                                onChange={handleChange}
+                                helperText="What is the name of the event?"
+                            />
+                            <TextField
+                                name="website"
+                                label="Website (Optional)"
+                                variant="outlined"
+                                size="small"
+                                value={formInputs.website}
+                                onChange={handleChange}
+                                helperText="Does the event have a website?"
+                            />
+                            <Stack direction={"row"} spacing={2}>
+                                <TextField
+                                    required
+                                    name="startDate"
+                                    type="date"
+                                    variant="outlined"
+                                    size="small"
+                                    value={formInputs.startDate}
+                                    onChange={handleChange}
+                                    helperText={
+                                        formInputs.endDate &&
+                                        formInputs.startDate &&
+                                        isBefore(
+                                            new Date(formInputs.endDate),
+                                            new Date(formInputs.startDate)
+                                        )
+                                            ? "Check your dates!"
+                                            : "When does/did it start?"
+                                    }
+                                    error={
+                                        formInputs.endDate &&
+                                        formInputs.startDate &&
+                                        isBefore(
+                                            new Date(formInputs.endDate),
+                                            new Date(formInputs.startDate)
+                                        )
+                                            ? true
+                                            : false
+                                    }
+                                />
+                                <TextField
+                                    required
+                                    name="endDate"
+                                    type="date"
+                                    variant="outlined"
+                                    size="small"
+                                    value={formInputs.endDate}
+                                    onChange={handleChange}
+                                    helperText={
+                                        formInputs.endDate &&
+                                        formInputs.startDate &&
+                                        isBefore(
+                                            new Date(formInputs.endDate),
+                                            new Date(formInputs.startDate)
+                                        )
+                                            ? "Check your dates!"
+                                            : "When does it end?"
+                                    }
+                                    error={
+                                        formInputs.endDate &&
+                                        formInputs.startDate &&
+                                        isBefore(
+                                            new Date(formInputs.endDate),
+                                            new Date(formInputs.startDate)
+                                        )
+                                            ? true
+                                            : false
+                                    }
+                                />
+                            </Stack>
+                            <TextField
+                                select
+                                required
+                                size="small"
+                                name="type"
+                                label="Type"
+                                value={formInputs.type}
+                                onChange={handleChange}
+                                helperText="What type of event is this?"
+                            >
+                                {typeOptions.map((option) => {
+                                    return (
+                                        <MenuItem
+                                            value={option.value}
+                                            key={option.value}
+                                        >
+                                            {option.value}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </TextField>
+                        </Stack>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleEdit(selectedPost.key)}>
+                        Confirm
+                    </Button>
+                    <Button onClick={() => setOpenEditModal(false)} autoFocus>
                         Cancel
                     </Button>
                 </DialogActions>
