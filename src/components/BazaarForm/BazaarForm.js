@@ -111,27 +111,9 @@ function BazaarForm({ geocodeName, markerCoords, clearForm }) {
                 // author: this.state.loggedInUser.email,
             });
 
-            toast.success("Successfully added to database!", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-            });
+            toast.success("Successfully added to database!");
         } catch (error) {
-            toast.error("Oops, something went wrong. Try again!", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-            });
+            toast.error("Oops, something went wrong. Try again!");
 
             throw new Error(error);
         }

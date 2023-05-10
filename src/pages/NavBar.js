@@ -49,7 +49,12 @@ const NavBar = ({ handleLogOut }) => {
                             type="button"
                             disableElevation
                         >
-                            <Typography variant="h5">BAZZINGA</Typography>
+                            <Typography
+                                variant="h5"
+                                sx={{ fontFamily: "'Yeseva One', cursive" }}
+                            >
+                                bazzinga!
+                            </Typography>
                         </Button>
                     </Typography>
 

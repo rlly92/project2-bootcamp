@@ -71,7 +71,7 @@ function ReviewsSection({ selectedPost }) {
                                     elevation={0}
                                     sx={{
                                         // width: "30vw",
-                                        width: "33vw",
+                                        width: "30vw",
                                         height: "20vh",
                                         overflowY: "hidden",
                                         overflowX: "auto",

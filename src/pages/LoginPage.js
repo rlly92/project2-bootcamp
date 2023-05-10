@@ -4,7 +4,8 @@ import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Button, Paper, Stack, TextField, Typography } from "@mui/material";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
     const [state, setState] = useState({ emailInput: "", passwordInput: "" });
@@ -21,7 +22,19 @@ const LoginPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        signInWithEmailAndPassword(auth, state.emailInput, state.passwordInput)
+        toast
+            .promise(
+                signInWithEmailAndPassword(
+                    auth,
+                    state.emailInput,
+                    state.passwordInput
+                ),
+                {
+                    pending: "Logging in...",
+                    success: "Successfully logged in!",
+                    error: "Oops, check your email and password.",
+                }
+            )
             .then((userCredential) => {
                 console.log("somebody has signed in");
             })
@@ -43,6 +56,14 @@ const LoginPage = () => {
 
     return (
         <Stack alignItems={"center"} justifyContent={"center"} my={5}>
+            <Paper sx={{ px: 5, py: 4, my: 7 }} elevation={0}>
+                <Typography
+                    variant="h1"
+                    sx={{ fontFamily: "'Yeseva One', cursive" }}
+                >
+                    bazzinga!
+                </Typography>
+            </Paper>
             <Typography variant="h2">Join the band of bazzingers.</Typography>
             <form onSubmit={handleSubmit}>
                 <Stack

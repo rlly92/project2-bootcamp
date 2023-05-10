@@ -30,6 +30,7 @@ function ViewMoreCenter({ selectedPost }) {
                     sx={{
                         overflowY: "auto",
                         maxHeight: "50vh",
+                        maxWidth: "30vw",
                         mt: 2,
                         mb: 3,
                         p: 2,

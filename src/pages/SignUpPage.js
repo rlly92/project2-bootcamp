@@ -24,11 +24,19 @@ const SignUpPage = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        createUserWithEmailAndPassword(
-            auth,
-            state.emailInput,
-            state.passwordInput
-        )
+        toast
+            .promise(
+                createUserWithEmailAndPassword(
+                    auth,
+                    state.emailInput,
+                    state.passwordInput
+                ),
+                {
+                    pending: "Creating an account...",
+                    success: "Successfully created an account!",
+                    error: "Oops, something went wrong. Try again!",
+                }
+            )
             .then(() => {
                 toast.success("🐝 Successfully created a new account!");
                 setState({ emailInput: "", passwordInput: "" });

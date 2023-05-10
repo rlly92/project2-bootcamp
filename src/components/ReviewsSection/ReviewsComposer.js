@@ -86,27 +86,9 @@ function ReviewsComposer({ selectedPost, setMode }) {
                 // author: this.state.loggedInUser.email,
             });
 
-            toast.success("Successfully added to database!", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-            });
+            toast.success("Successfully added to database!");
         } catch (error) {
-            toast.error("Oops, something went wrong. Try again!", {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-            });
+            toast.error("Oops, something went wrong. Try again!");
 
             throw new Error(error);
         }
@@ -133,6 +115,7 @@ function ReviewsComposer({ selectedPost, setMode }) {
 
         if (haveError) return;
 
+        toast.info("Submitting...");
         const reviewListRef = dbRef(
             database,
             `${DB_POSTS_KEY}/${selectedPost.key}/reviews`
@@ -144,6 +127,7 @@ function ReviewsComposer({ selectedPost, setMode }) {
         await updateExistingData(selectedPost.key, images);
         await writeData(images, newReviewRef, newReviewKey);
 
+        toast.success("Successfully submitted a review!");
         setFormInputs({
             title: "",
             text: "",
