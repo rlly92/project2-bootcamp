@@ -5,6 +5,7 @@ import CommentsSection from "../Sidebar/SideInfo/CommentsSection";
 
 import ChipsSection from "./ViewMoreCenter/ChipsSection";
 import Lightbox from "../Lightbox/Lightbox";
+import AddPhoto from "./ViewMoreCenter/AddPhoto";
 
 function ViewMoreCenter({ selectedPost }) {
     let urlArray = Object.values(selectedPost.images);
@@ -17,7 +18,8 @@ function ViewMoreCenter({ selectedPost }) {
             <ChipsSection tags={selectedPost.tags} postKey={selectedPost.key} />
             <br />
             <Typography variant="h5">Photo gallery 🤳</Typography>
-            <Box height={"50vh"} sx={{ overflowY: "scroll" }}>
+            <AddPhoto selectedPost={selectedPost} />
+            <Box sx={{ overflowY: "scroll", maxHeight: "50vh" }}>
                 <Lightbox urlArray={urlArray} />
             </Box>
             <br />
